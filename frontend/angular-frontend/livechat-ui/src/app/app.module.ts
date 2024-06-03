@@ -4,20 +4,24 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HomeFriendlistComponent } from './home-friendlist/home-friendlist.component';
-import { NavHeaderComponent } from './nav-header/nav-header.component';
 import { LayoutModule } from '@angular/cdk/layout';
+import { JwtModule } from '@auth0/angular-jwt';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
-import { LoginComponent } from './login/login.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { JwtModule } from '@auth0/angular-jwt';
+
 import { ConfigService } from './services/config.service';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { NavHeaderComponent } from './nav-header/nav-header.component';
+import { HomeFriendlistComponent } from './home-friendlist/home-friendlist.component';
 
 function configFactory(configService: ConfigService) {
   return () => configService.loadConfig();
@@ -32,13 +36,17 @@ export function tokenGetter() {
     AppComponent,
     HomeFriendlistComponent,
     NavHeaderComponent,
-    LoginComponent
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    FormsModule,
     BrowserAnimationsModule,
     LayoutModule,
+    HttpClientModule,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
@@ -46,7 +54,6 @@ export function tokenGetter() {
     MatListModule,
     MatMenuModule,
     MatSnackBarModule,
-    HttpClientModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
