@@ -1,0 +1,104 @@
+<div class="page-container">
+    <mat-form-field class="search-field" appearance="outline">
+      <mat-label>Search Table</mat-label>
+      <input matInput type="search" placeholder="search" (keyup)="searchTable($event)"/>
+    </mat-form-field>
+
+  <div class="mat-elevation-z8" >
+    <table mat-table class="full-width-table" matSort aria-label="Elements">
+      <ng-container matColumnDef="accountId">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Account Id</th>
+        <td mat-cell *matCellDef="let row">{{row.accountId}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="username">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
+        <td mat-cell *matCellDef="let row">{{row.username}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="firstName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
+        <td mat-cell *matCellDef="let row">{{row.firstName}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="lastName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
+        <td mat-cell *matCellDef="let row">{{row.lastName}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+        <td mat-cell *matCellDef="let row">{{row.email}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="lastLoginDateDisplay">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Login</th>
+        <td mat-cell *matCellDef="let row">{{row.lastLoginDateDisplay | date:'short'}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Role</th>
+        <td mat-cell *matCellDef="let row">{{row.role?.roleName}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="isEnabled">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Enabled</th>
+        <td mat-cell *matCellDef="let row">
+          <span class="green-cell" *ngIf="row.isEnabled === 1">Active</span>
+          <span class="red-cell" *ngIf="row.isEnabled === 0">Inactive</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="isNonLocked">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Locked</th>
+        <td mat-cell *matCellDef="let row">
+          <span class="green-cell" *ngIf="row.isNonLocked === 1">Unlocked</span>
+          <span class="red-cell" *ngIf="row.isNonLocked === 0">Locked</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="isUsingMfa">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>MFA</th>
+        <td mat-cell *matCellDef="let row">
+          <span class="green-cell" *ngIf="row.isUsingMfa === 1">MFA</span>
+          <span class="red-cell" *ngIf="row.isUsingMfa === 0">No MFA</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Created At</th>
+        <td mat-cell *matCellDef="let row">{{row.createdAt | date:'short'}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+        <td mat-cell *matCellDef="let row">
+          <button matTooltip="edit this account" [routerLink]="['/accounts/edit',row.accountId]" (click)="selectEdit(row)"><mat-icon class="blue-icon">edit</mat-icon></button>
+          <button matTooltip="delete this account" [routerLink]="['/accounts/delete',row.accountId]" (click)="selectDelete()"><mat-icon class="red-icon">delete</mat-icon></button>
+          <button matTooltip="reset password" (click)="selectResetPassword(row)"><mat-icon class="yellow-icon">refresh</mat-icon></button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (dblclick)="selectDetail(row)"></tr>
+      
+      <!--SHOW WHEN NO DATA BEEN FOUND-->
+      <tr *matNoDataRow="">
+        <td class="mat-cell" style="color: red;" colspan="4">SORRY NO DATA HAS BEEN FOUND</td>
+      </tr>
+    </table>
+    
+    <button (click)="refresh()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+
+    <mat-paginator #paginator
+        [length]="dataSource.data.length"
+        [pageIndex]="0"
+        [pageSize]="10"
+        [pageSizeOptions]="[5, 10, 20]"
+        aria-label="Select page">
+    </mat-paginator>
+  </div>
+
+</div>

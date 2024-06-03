@@ -1,0 +1,109 @@
+application:
+  title: Messenger for cool people
+  version: 1.0
+  front-end:
+    url: http://localhost:4200
+  upload:
+    profile-image:
+      max-size: 2_097_152 #2MB in bytes
+jwt:
+#  parent-dir: springboot-backend
+  private-key: rsaprivkey.der
+  public-key: rsapubkey.der
+  secret: DF1B7DCBA53672B22287C9A87D272EB3E67CB745E81551EB45F4DC
+
+server:
+  port: 8088
+#  error:
+#    whitelabel:
+#      enabled: false
+
+
+logging:
+  level:
+    sql: debug
+    org.hibernate.orm.jdbc.bind: trace
+    org:
+      apache:
+        commons:
+          beanutils: DEBUG
+
+spring:
+  jpa:
+    database-platform: org.hibernate.dialect.OracleDialect
+    generate-ddl: true
+    #    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        globally_quoted_indentifiers: true
+        dialect: org.hibernate.dialect.OracleDialect
+        format_sql: true
+  sql:
+    init:
+      mode: never
+      continue-on-error: false
+  servlet:
+    multipart:
+      max-file-size: 5MB
+  profiles:
+    active: local
+#  datasource:
+#    url: jdbc:oracle:thin:@//localhost:1521/orclpdb
+#    url: jdbc:oracle:thin:@localhost:1521:sid  -  connect by sid
+#    username: antimess
+#    password: antimess
+#---
+#spring:
+#  config:
+#    activate:
+#      on-profile: 'docker'
+#  datasource:
+#    url: jdbc:oracle:thin:@//host.docker.internal:1521/orclpdb
+#    username: antimess
+#    password: antimess
+
+# mongodb setting
+#  data:
+#    mongodb:
+#      username: root
+#      password: root
+#      host: localhost
+#      port: 27017
+#      database: livechat_app
+#      authentication-database: admin
+#  web:
+#    resources:
+#      add-mappings: false
+#  mvc:
+#    throw-exception-if-no-handler-found: true
+
+#  mail:
+#    host: smtp.gmail.com
+#    port: 587
+#    username: antimessenger
+#    password: dyln ylub vbna ohit
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+
+#  kafka:
+#    consumer:
+#      bootstrap-servers: localhost:9092
+#      group-id: myGroup
+#      auto-offset-reset: earliest
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+#    producer:
+#      bootstrap-servers: localhost:9092
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#      retries: 1
+#      acks: -1
+#      properties:
+#        [enable.idempotence]=true
+#        [max.in.flight.requests.per.connection]=5

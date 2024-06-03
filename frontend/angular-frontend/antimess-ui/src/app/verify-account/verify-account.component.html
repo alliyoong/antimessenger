@@ -1,0 +1,9 @@
+<div class="container">
+    <div *ngIf="isSucceeded" class="success">
+        <h2 style="color: green;">{{message | lowercase}}</h2>
+        <span>Congratulation. You can login and start using the application</span>
+    </div>
+    <div *ngIf="!isSucceeded" class="error">
+        <h2 style="color: red;">{{message | lowercase}}</h2>
+    </div>
+</div>

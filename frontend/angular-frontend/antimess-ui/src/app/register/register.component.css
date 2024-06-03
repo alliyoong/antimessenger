@@ -1,0 +1,111 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;600&display=swap");
+* {
+  box-sizing: border-box;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background: linear-gradient(45deg, #131086, #b621f3);
+  padding: 40px;
+}
+
+.container {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* grid-template-columns: 50% 50%; */
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.register-header {
+  margin-bottom: 50px;
+}
+.register-header h1 {
+  text-transform: uppercase;
+  background: linear-gradient(to right, #30CFD0 0%, #330867 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+.register-header p {
+  opacity: 0.7;
+}
+
+.register-form {
+  width: 450px;
+}
+.register-form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.register-form-footer a {
+  flex: 6;
+  gap: 15px;
+  border: 1px solid black;
+  border-radius: 100px;
+  padding: 0.6rem;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  color: black;
+  text-decoration: none;
+}
+
+button:disabled,
+button[disabled] {
+  border: none;
+  background: grey;
+  color: white;
+  padding: 1rem;
+  border-radius: 100px;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 18px;
+  height: 35px;
+}
+
+button {
+  border: none;
+  background: linear-gradient(45deg, #131086, #b621f3);
+  color: white;
+  padding: 1rem;
+  border-radius: 100px;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 18px;
+  height: 55px;
+  cursor: pointer;
+}
+
+
+/* Responsive */
+@media (max-width: 1350px) {
+  /* .login-left { */
+    /* padding: 50px !important; */
+  /* } */
+  /* .login-form { */
+    /* width: 100%; */
+  /* } */
+  /* .login-form-footer { */
+    /* flex-direction: column; */
+    /* gap: 15px; */
+  /* } */
+}
+@media (max-width: 768px) {
+  body {
+    padding: 20px;
+  }
+  .container {
+    grid-template-columns: auto;
+  }
+  .register-right {
+    display: none;
+  }
+}/*# sourceMappingURL=style.css.map */

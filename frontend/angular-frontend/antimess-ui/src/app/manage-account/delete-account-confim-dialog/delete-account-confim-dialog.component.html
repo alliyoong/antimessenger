@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>Delete account</h1>
+<div mat-dialog-content>
+    Are you sure to delete this account?
+</div>
+<span style="align-self: center;"><mat-spinner [diameter]="45" *ngIf="showLoading"></mat-spinner></span>
+<div mat-dialog-action *ngIf="!showLoading">
+    <button mat-button cdkFocusInitial (click)="deleteAccount()">Yes</button>
+    <button mat-button mat-dialog-close routerLink="/accounts">No</button>
+</div>

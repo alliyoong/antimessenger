@@ -1,0 +1,73 @@
+<div class="container">
+      <div class="left-containter">
+        <div mat-dialog-title class="left-header">
+            <h1>Account Detail</h1>
+            <p>Show details of the account</p>
+        </div>
+          <div class="left-content">
+            <div class="content-item">
+              <div class="profile-image">
+                <img src= {{account.imageUrl}} alt=""> 
+              </div>
+            </div>
+            <div class="content-item">
+                <label for="username">Username</label>
+                <input type="text" disabled id="username" [value]="account.username">
+            </div>
+            <div class="content-item">
+                <label for="name">Full Name</label>
+                <input type="text" disabled id="name" [value]="account.lastName + ' ' +account.firstName">
+            </div>
+            <div class="content-item">
+                <!-- <label for="isEnabled">Enabled</label> -->
+                <mat-slide-toggle matInput disabled [checked]="account.isEnabled | booleanTransform">Enabled</mat-slide-toggle>
+                <!-- <input type="text" disabled id="isEnabled" [value]="account.isEnabled"> -->
+            </div>
+            <div class="content-item">
+                <!-- <label for="isNonLocked">Non Locked</label> -->
+                <mat-slide-toggle matInput disabled [checked]="account.isNonLocked | booleanTransform">Non Locked</mat-slide-toggle>
+                <!-- <input type="text" disabled id="isNonLocked" [value]="account.isNonLocked"> -->
+            </div>
+            <div class="content-item">
+                <!-- <label for="isUsingMfa">Using MFA</label> -->
+                <mat-slide-toggle matInput disabled [checked]="account.isUsingMfa | booleanTransform">Using MFA</mat-slide-toggle>
+                <!-- <input type="text" disabled id="isUsingMfa" [value]="account.isUsingMfa"> -->
+            </div>
+            
+          </div>
+      </div>
+      <div class="right-container">
+            <div class="content-item">
+                <label for="email">Email</label>
+                <input type="text" disabled id="email" [value]="account.email">
+            </div>
+            <div class="content-item">
+                <label for="phone">Phone Number</label>
+                <input type="text" disabled id="phone" [value]="account.phone? account.phone : ''">
+            </div>
+            <div class="content-item">
+                <label for="bio">Bio</label>
+                <input type="text" disabled id="bio" [value]="account.bio? account.bio : ''">
+            </div>
+            <div class="content-item">
+                <label for="address">Address</label>
+                <input type="text" disabled id="address" [value]="account.address? account.address : ''">
+            </div>
+            <div class="content-item">
+                <label for="lastLoginDate">Last login at</label>
+                <input type="text" disabled id="lastLoginDate" [value]="account.lastLoginDateDisplay? (account.lastLoginDateDisplay|date:'short') : ''">
+            </div>
+            <div class="content-item">
+                <label for="createdAt">Joined at</label>
+                <input type="text" disabled id="createdAt" [value]="account.createdAt|date:'short'">
+            </div>
+            <div class="content-item">
+                <label for="role">Role</label>
+                <input type="text" disabled id="role" [value]="account.role.roleName|slice:5">
+            </div>
+      </div>
+</div>
+          <mat-dialog-actions align="center">
+            <button mat-button mat-dialog-close routerLink="/accounts">Close</button>
+          </mat-dialog-actions>
+

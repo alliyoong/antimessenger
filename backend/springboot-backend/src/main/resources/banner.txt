@@ -1,0 +1,11 @@
+
+${AnsiBackground.RED}                     _      ____  _____ _________ _____ ____    ____ ________   ______   ______
+${AnsiBackground.BLUE}                   / \    |_   \|_   _|  _   _  |_   _|_   \  /   _|_   __  |.' ____ \.' ____ \
+${AnsiBackground.YELLOW}                / _ \     |   \ | | |_/ | | \_| | |   |   \/   |   | |_ \_|| (___ \_| (___ \_|
+${AnsiBackground.GREEN}                / ___ \    | |\ \| |     | |     | |   | |\  /| |   |  _| _  _.____`. _.____`.
+${AnsiBackground.MAGENTA}            _/ /   \ \_ _| |_\   |_   _| |_   _| |_ _| |_\/_| |_ _| |__/ || \____) | \____) |
+${AnsiBackground.CYAN}              |____| |____|_____|\____| |_____| |_____|_____||_____|________| \______.'\______.'
+${AnsiBackground.DEFAULT}
+
+${application.title} ${application.version}
+Powered by Spring Boot ${spring-boot.version}

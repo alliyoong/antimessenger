@@ -1,0 +1,8 @@
+<div *ngIf="accounts$|async as data">
+    <app-list-accounts 
+    (deleteAccount)="deleteAccount($event)" 
+    (editAccount)="editAccount($event)"
+    (refreshEvent)="refreshSource()"
+    [accounts]="data">
+    </app-list-accounts>
+</div>

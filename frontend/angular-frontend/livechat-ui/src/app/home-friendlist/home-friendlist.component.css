@@ -1,0 +1,40 @@
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+.main-content {
+  height: 100%;
+  background: linear-gradient(320deg, #ffb3ff, #99ddff, #ffdd99);
+  display: flex;
+  justify-content: center;
+}
+
+.user-list {
+  overflow: auto;
+  align-items: center;
+  display: flex;
+  height: inherit;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex-basis: 40%;
+}
+
+.item-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.user-item {
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 10px;
+  box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
+  margin-bottom: 10px;
+  text-align: center;
+  width: 45%;
+
+}

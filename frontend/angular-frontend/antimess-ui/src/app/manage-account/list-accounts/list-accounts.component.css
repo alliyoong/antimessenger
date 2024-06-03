@@ -1,0 +1,53 @@
+.full-width-table {
+  width: 100%;
+}
+
+.search-field {
+  float: right;
+  margin: 30px;
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.page-container {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.mat-mdc-row .mat-mdc-cell{
+  cursor: pointer;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell{
+  background-color: #ccf5ff;
+}
+
+.red-cell {
+  background-color: #ff6666;
+}
+
+.green-cell {
+  background-color: #66ff33;
+}
+
+.mat-column-isEnabled {
+  flex: 6rem;
+  min-width: 6rem;
+}
+
+.mat-column-isUsingMfa {
+  flex: 6rem;
+  min-width: 6rem;
+}
+
+.mat-column-isNonLocked {
+  flex: 6rem;
+  min-width: 6rem;
+}
+
+.mat-column-actions {
+  flex: 9rem;
+  min-width: 9rem;
+}
+

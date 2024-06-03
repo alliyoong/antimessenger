@@ -1,0 +1,44 @@
+<div class="container">
+  <div class="login-header">
+      <h1>Welcome to AntiMess login page</h1>
+      <p>Please login to use the application</p>
+  </div>
+  <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login()">
+      <div class="login-form-content">
+        <mat-form-field class="example-full-width form-item">
+          <mat-label>Enter username</mat-label>
+          <input type="text" matInput formControlName="username"
+                 placeholder="username">
+          <mat-error *ngIf="loginForm.get('username')?.hasError('required')">
+            Username is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width form-item">
+          <mat-label>Enter password</mat-label>
+          <input type="password" matInput formControlName="password"
+                 placeholder="password" [type]="hide ? 'password' : 'text'">
+          <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+            Password is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('invalidPassword')">
+            Password should have 8 or more characters with number, uppercase and special character
+          </mat-error>
+          <mat-hint>8 characters or more contains number, uppercase and special characters</mat-hint>
+        </mat-form-field>
+          <span style="align-self: center;"><mat-spinner [diameter]="45" *ngIf="showLoading"></mat-spinner></span>
+          <button [disabled]="loginForm.invalid" mat-raised-button color="primary" *ngIf="!showLoading">Sign in</button>
+          <div class="form-item">
+            <span>Don't have an account yet? Please click <a routerLink="/register">here</a> to register</span>
+          </div>
+      </div>
+  </form>
+</div>
+<!-- <form class="example-form" [formGroup]="loginForm" (ngSubmit)="login()"> -->
+  <!-- <div> -->
+    <!-- <button [disabled]="loginForm.invalid" mat-raised-button color="primary">Login</button> -->
+  <!-- </div> -->
+<!-- </form> -->
