@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { SnackbarNotiService } from '../services/snackbar-noti.service';
@@ -12,13 +12,16 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
+import { CustomValidators } from '../validators/custom-validators';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styleUrls: ['./login.component.scss'],
   standalone: true,
   imports: [
+    RouterModule,
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
@@ -43,8 +46,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
-      username: new FormControl('', { validators: [] }),
-      password: new FormControl('', { validators: [] })
+      username: new FormControl('', { validators: [Validators.required] }),
+      password: new FormControl('', { validators: [Validators.required, CustomValidators.validatePassword] })
     })
   }
 
@@ -53,23 +56,25 @@ export class LoginComponent implements OnInit, OnDestroy {
     const fd = new FormData();
     fd.append('username', this.loginForm.getRawValue().username);
     fd.append('password', this.loginForm.getRawValue().password);
+    console.log(fd.get('username'));
+    console.log(fd.get('password'));
     this.userService.login(fd).pipe(take(1)).subscribe({
       next: res => {
-        const token = res.headers.get(HeaderType.JWT_TOKEN);
-        const currentUser: User = res.body?.data;
+        // const token = res.headers.get(HeaderType.JWT_TOKEN);
+        // const currentUser: User = res.body?.data;
         this.notiService.sendNoti(NotificationType.SUCCESS, res.body!.message);
         this.showLoading = false;
         this.router.navigate(['/friendlist']);
       },
       error: res => {
-        this.notiService.sendNoti(NotificationType.ERROR, res.body!.message);
+        const message = res.message || res.body!.message;
+        this.notiService.sendNoti(NotificationType.ERROR, message);
         this.showLoading = false;
       }
     });
   }
 
   ngOnDestroy(): void {
-    throw new Error('Method not implemented.');
   }
 
 }

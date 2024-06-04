@@ -34,4 +34,4 @@ spring:
       enabled: false
 
 server:
-  port: 8086
+  port: 8089

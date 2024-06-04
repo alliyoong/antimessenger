@@ -22,6 +22,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { NavHeaderComponent } from './nav-header/nav-header.component';
 import { HomeFriendlistComponent } from './home-friendlist/home-friendlist.component';
+// import { RegisterComponent } from './register/register.component';
 
 function configFactory(configService: ConfigService) {
   return () => configService.loadConfig();
@@ -36,7 +37,8 @@ export function tokenGetter() {
     AppComponent,
     HomeFriendlistComponent,
     NavHeaderComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    // RegisterComponent
   ],
   imports: [
     BrowserModule,

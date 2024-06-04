@@ -5,7 +5,7 @@
   </div>
   <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login()">
     <div class="login-form-content">
-      <mat-form-field class="example-full-width form-item">
+      <mat-form-field class="example-full-width form-item" color="warn">
         <mat-label>Enter username</mat-label>
         <input type="text" matInput formControlName="username" placeholder="username">
         <mat-error *ngIf="loginForm.get('username')?.hasError('required')">
@@ -30,16 +30,10 @@
         <mat-hint>8 characters or more contains number, uppercase and special characters</mat-hint>
       </mat-form-field>
       <span style="align-self: center;"><mat-spinner [diameter]="45" *ngIf="showLoading"></mat-spinner></span>
-      <button id="submit-button" [disabled]="loginForm.invalid" mat-raised-button color="primary"
-        *ngIf="!showLoading">Sign in</button>
+      <button id="submit-button" [disabled]="loginForm.invalid" mat-raised-button *ngIf="!showLoading">Sign in</button>
       <div class="form-item">
         <span>Don't have an account yet? Please click <a routerLink="/register">here</a> to register</span>
       </div>
     </div>
   </form>
 </div>
-<!-- <form class="example-form" [formGroup]="loginForm" (ngSubmit)="login()"> -->
-<!-- <div> -->
-<!-- <button [disabled]="loginForm.invalid" mat-raised-button color="primary">Login</button> -->
-<!-- </div> -->
-<!-- </form> -->
