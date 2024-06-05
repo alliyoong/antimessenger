@@ -22,12 +22,12 @@ spring:
       properties:
         idempotence: true
         max.in.flight.requests.per.connection: 5
-    consumer:
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      auto-offset-reset: earliest
-      group-id: livechatGroup
-      bootstrap-servers: localhost:9092
+#    consumer:
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+#      auto-offset-reset: earliest
+#      group-id: live-chat-group
+#      bootstrap-servers: localhost:9092
 
   docker:
     compose:

@@ -1,44 +1,127 @@
 services:
-  app:
-    container_name: antimess
-    image: antimess-backend
-    build: 
-      context: ./springboot-backend/
-      dockerfile: Dockerfile
-    ports:
-      - 8088:8088
-    expose:
-      - 8088
-    restart: always
-    # network_mode: host
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATASOURCE_URL: jdbc:oracle:thin:@//host.docker.internal:1521/orclpdb
-      SPRING_DATASOURCE_USERNAME: antimess
-      SPRING_DATASOURCE_PASSWORD: antimess
+  # app:
+  #   container_name: antimess
+  #   image: antimess-backend
+  #   build: 
+  #     context: ./springboot-backend/
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 8088:8088
+  #   expose:
+  #     - 8088
+  #   restart: always
+  #   # network_mode: host
+  #   environment:
+  #     SPRING_PROFILES_ACTIVE: docker
+  #     SPRING_DATASOURCE_URL: jdbc:oracle:thin:@//host.docker.internal:1521/orclpdb
+  #     SPRING_DATASOURCE_USERNAME: antimess
+  #     SPRING_DATASOURCE_PASSWORD: antimess
+
       # SPRING_JPA_DATABASE-PLATFORM: org.hibernate.dialect.OracleDialect
       # SPRING_JPA_GENERATE-DDL: true
 
-  mongodb:
-    image: mongo
-    container_name: mongo_db
-    ports:
-        - 27017:27017
+  # mongodb:
+  #   image: mongo
+  #   container_name: mongo_db
+  #   ports:
+  #       - 27017:27017
+  #   volumes:
+  #       - mongo:/data
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=root
+  #     - MONGO_INITDB_ROOT_PASSWORD=root
+  # mongo-express:
+  #   image: mongo-express
+  #   container_name: mongo_express
+  #   ports:
+  #      - 8081:8081
+  #   environment:
+  #     - ME_CONFIG_BASICAUTH_USERNAME=root
+  #     - ME_CONFIG_BASICAUTH_PASSWORD=root
+  #     - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+  #     - ME_CONFIG_MONGODB_ADMINPASSWORD=root
+  #     - ME_CONFIG_MONGODB_SERVER=mongodb
+
+  zookeeper:
+    image: bitnami/zookeeper
+    container_name: zookeeper
     volumes:
-        - mongo:/data
+      - zookeeper_data:/bitnami/zookeeper/data
+      - zookeeper_log:/bitnami/zookeeper/log
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=root
-  mongo-express:
-    image: mongo-express
-    container_name: mongo_express
+      - ALLOW_ANONYMOUS_LOGIN=yes   # not recommended for production
+      - SNAPSHOT_TRUST_EMPTY=true
+      - ZOOKEEPER_TICK_TIME=2000
+    expose:
+      - 2181
+    networks:
+      - kafka-network
+    healthcheck:
+      # test: 'nc -z localhost 2182'
+      test: ["CMD", "zkServer.sh", "status"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+  kafka:
+    image: bitnami/kafka
+    container_name: kafka
+    volumes:
+      - kafka_data:/bitnami/kafka
+    networks:
+      - kafka-network
     ports:
-       - 8081:8081
+      - 29092:29092
+      - 9092:9092
     environment:
-      - ME_CONFIG_BASICAUTH_USERNAME=root
-      - ME_CONFIG_BASICAUTH_PASSWORD=root
-      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
-      - ME_CONFIG_MONGODB_ADMINPASSWORD=root
-      - ME_CONFIG_MONGODB_SERVER=mongodb
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes  # not recommended for production
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:29092,EXTERNAL://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:29092,EXTERNAL://localhost:9092
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
+      - KAFKA_BROKER_ID=1
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    healthcheck:
+      test: "kafka-topics.sh --bootstrap-server localhost:9092 --list"
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    expose:
+      - 9092
+      - 29092
+
+  # kafka-producer:
+  #   container_name: kafka-producer
+  #   image: confluentinc/cp-kafkacat
+  #   volumes:
+  #     - ./my_msgs.txt:/data/my_msgs.txt
+  #   networks:
+  #     - kafka-network
+  #   depends_on:
+  #     kafka:
+  #       condition: service_healthy
+  #   command: "kafkacat -b kafka:9092 -t test -P -l /data/my_msgs.txt"
+  # kafka-consumer:
+  #   container_name: kafka-consumer
+  #   restart: always
+  #   image: confluentinc/cp-kafkacat
+  #   depends_on:
+  #     kafka:
+  #       condition: service_healthy
+  #   networks:
+  #     - kafka-network
+  #   command: "kafkacat -b kafka:9092 -C -f '\nKey (%K bytes): %k\t\nValue (%S bytes): %s\n\Partition: %p\tOffset: %o\n--\n' -t test"
+
 volumes:
   mongo: {}
+  kafka_data:  
+  zookeeper_data:
+  zookeeper_log:
+    
+networks: 
+  kafka-network:
+

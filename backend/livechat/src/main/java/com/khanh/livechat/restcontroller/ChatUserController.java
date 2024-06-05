@@ -3,6 +3,8 @@ package com.khanh.livechat.restcontroller;
 import com.khanh.livechat.model.HttpResponse;
 import com.khanh.livechat.model.dto.ChatUserLogin;
 import com.khanh.livechat.model.dto.ChatUserRegister;
+import com.khanh.livechat.service.KafkaProducerService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +16,11 @@ import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @Slf4j
+@RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:5000")
 public class ChatUserController {
+
+    private final KafkaProducerService kafkaProducer;
 
     @PostMapping("/login")
     public ResponseEntity<HttpResponse> login(
@@ -28,6 +33,7 @@ public class ChatUserController {
                 .username(username)
                 .password(password)
                 .build();
+        kafkaProducer.login(user);
         return ResponseEntity.created(null).body(
                 HttpResponse.builder()
                         .data(Map.of("user", user))
