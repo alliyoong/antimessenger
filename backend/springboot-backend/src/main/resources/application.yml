@@ -2,7 +2,9 @@ application:
   title: Messenger for cool people
   version: 1.0
   front-end:
-    url: http://localhost:4200
+    url:
+      admin: http://localhost:4200
+      live-chat: http://localhost:5000
   upload:
     profile-image:
       max-size: 2_097_152 #2MB in bytes
@@ -92,18 +94,21 @@ spring:
 #            enable: true
 
   kafka:
-    consumer:
-      bootstrap-servers: localhost:9092
-      group-id: live-chat-group
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-#    producer:
+#    consumer:
 #      bootstrap-servers: localhost:9092
-#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-#      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-#      retries: 1
-#      acks: -1
-#      properties:
-#        [enable.idempotence]=true
-#        [max.in.flight.requests.per.connection]=5
+#      group-id: live-chat-group
+#      auto-offset-reset: earliest
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      retries: 1
+      acks: -1
+      properties:
+        idempotence: true
+        max.in.flight.requests.per.connection: 5
+        spring.json.add.type.headers: false
+#        "[spring.json.add.type.headers]": false

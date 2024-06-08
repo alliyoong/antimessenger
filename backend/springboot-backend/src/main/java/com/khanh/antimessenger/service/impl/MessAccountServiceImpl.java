@@ -1,6 +1,9 @@
 package com.khanh.antimessenger.service.impl;
 
+import com.khanh.antimessenger.constant.KafkaEventType;
 import com.khanh.antimessenger.dto.CreateAccountRequestDto;
+import com.khanh.antimessenger.dto.UserKafkaDto;
+import com.khanh.antimessenger.dto.UserKafkaEvent;
 import com.khanh.antimessenger.dto.dtomapper.DtoMapper;
 import com.khanh.antimessenger.exception.InvalidPasswordException;
 import com.khanh.antimessenger.exception.ResourceAlreadyInUseException;
@@ -11,12 +14,12 @@ import com.khanh.antimessenger.repository.MessAccountRepository;
 import com.khanh.antimessenger.utilities.EmailService;
 import com.khanh.antimessenger.service.MessAccountService;
 import com.khanh.antimessenger.service.RoleService;
+import com.khanh.antimessenger.utilities.KafkaProducerService;
 import com.khanh.antimessenger.utilities.PasswordService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -48,6 +51,7 @@ public class MessAccountServiceImpl implements MessAccountService {
     private final PasswordEncoder encoder;
     private final RoleService roleService;
     private final EmailService emailService;
+    private final KafkaProducerService kafkaProducerService;
 
     @Override
     public MessAccount createAccount(CreateAccountRequestDto data, MultipartFile profile) {
@@ -64,6 +68,16 @@ public class MessAccountServiceImpl implements MessAccountService {
             toCreate.setRole(toCreateRole);
             messAccountRepository.save(toCreate);
             saveProfileImage(toCreate, profile);
+
+            // send to kafka consumer
+            var userMapper = new DtoMapper<>(UserKafkaDto::new, MessAccount::new);
+            UserKafkaDto userKafkaDto = userMapper.fromEntity(toCreate);
+            kafkaProducerService.sendAddUserInfo(
+                    UserKafkaEvent.builder()
+                            .user(userKafkaDto)
+                            .type(KafkaEventType.USER_ADD_EVENT)
+                            .build()
+            );
         } catch (Exception e) {
             throw new RuntimeException("An error occurred. Please try again");
         }
@@ -114,6 +128,16 @@ public class MessAccountServiceImpl implements MessAccountService {
 //        log.info(String.format("account dc update la: %s", toUpdate.toString()));
         messAccountRepository.save(toUpdate);
         updateProfileImage(toUpdate.getUsername(), profileImage);
+
+        // send to kafka consumer
+        var userMapper = new DtoMapper<>(UserKafkaDto::new, MessAccount::new);
+        UserKafkaDto userKafkaDto = userMapper.fromEntity(toUpdate);
+        kafkaProducerService.sendUpdateUserInfo(
+                UserKafkaEvent.builder()
+                        .type(KafkaEventType.USER_UPDATE_EVENT)
+                        .user(userKafkaDto)
+                        .build()
+        );
         return toUpdate;
     }
 
@@ -126,7 +150,18 @@ public class MessAccountServiceImpl implements MessAccountService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        var userMapper = new DtoMapper<>(UserKafkaDto::new, MessAccount::new);
+        UserKafkaDto userKafkaDto = userMapper.fromEntity(account);
+
         messAccountRepository.deleteById(id);
+
+        // send to kafka consumer
+        kafkaProducerService.sendDeleteUserInfo(
+                UserKafkaEvent.builder()
+                        .type(KafkaEventType.USER_DELETE_EVENT)
+                        .user(userKafkaDto)
+                        .build()
+        );
     }
 
     @Override

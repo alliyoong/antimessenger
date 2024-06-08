@@ -18,6 +18,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -43,9 +44,9 @@ public class AccessTokenService {
 //    @Value("${jwt.parent-dir}")
 //    private String parentDirName;
     @Value("${jwt.public-key}")
-    private String publicKeyFile;
+    private String publicKeyFileName;
     @Value("${jwt.private-key}")
-    private String privateKeyFile;
+    private String privateKeyFileName;
 
     public String generateToken(UserPrincipal userPrincipal) {
         String[] claims = getClaimsFromUser(userPrincipal);
@@ -110,8 +111,11 @@ public class AccessTokenService {
         PublicKey pk;
         try {
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            log.info( String.format("Path to public key file: %s", Paths.get("", publicKeyFile).toAbsolutePath()));
-            byte[] encodedKey = Files.readAllBytes(Paths.get("", publicKeyFile).toAbsolutePath());
+            var classLoader = getClass().getClassLoader();
+            var publicKeyFile = new File(classLoader.getResource(publicKeyFileName).getFile());
+            log.info( String.format("Path to public key file: %s", publicKeyFile.toPath()));
+//            byte[] encodedKey = Files.readAllBytes(Paths.get("", publicKeyFile).toAbsolutePath());
+            byte[] encodedKey = Files.readAllBytes(publicKeyFile.toPath());
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(encodedKey);
             pk = keyFactory.generatePublic(keySpec);
         } catch (NoSuchAlgorithmException e) {
@@ -128,8 +132,11 @@ public class AccessTokenService {
         PrivateKey pk;
         try {
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            log.info( String.format("Path to private key file: %s", Paths.get("", privateKeyFile).toAbsolutePath()));
-            byte[] encodedKey = Files.readAllBytes(Paths.get("", privateKeyFile).toAbsolutePath());
+            ClassLoader classLoader = getClass().getClassLoader();
+            var privateKeyFile = new File(classLoader.getResource(privateKeyFileName).getFile());
+            log.info( String.format("Path to private key file: %s", privateKeyFile.toPath()));
+//            byte[] encodedKey = Files.readAllBytes(Paths.get("", privateKeyFile).toAbsolutePath());
+            byte[] encodedKey = Files.readAllBytes(privateKeyFile.toPath());
             PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(encodedKey);
             pk = keyFactory.generatePrivate(keySpec);
         } catch (NoSuchAlgorithmException e) {

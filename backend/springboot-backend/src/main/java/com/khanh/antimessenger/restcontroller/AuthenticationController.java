@@ -17,9 +17,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.DataBinder;
-import org.springframework.validation.SmartValidator;
 import org.springframework.validation.Validator;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +31,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RequestMapping(path = {"/"})
 @RequiredArgsConstructor
 @Slf4j
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = {"http://localhost:4200"})
 public class AuthenticationController extends AppExceptionHandler {
     private final AuthenticationService authenticationService;
     private final Validator validator;

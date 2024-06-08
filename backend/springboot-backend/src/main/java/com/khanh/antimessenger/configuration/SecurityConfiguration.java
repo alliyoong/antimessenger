@@ -5,6 +5,7 @@ import com.khanh.antimessenger.filter.CustomAccessDeniedHandler;
 import com.khanh.antimessenger.filter.CustomForbiddenEntryPoint;
 import com.khanh.antimessenger.filter.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -29,6 +30,12 @@ public class SecurityConfiguration {
     private final JwtAuthorizationFilter authorizationFilter;
     private final AuthenticationProvider authenticationProvider;
 
+    @Value("${application.front-end.url.admin}")
+    private String frontEndUrlAdmin;
+
+    @Value("${application.front-end.url.live-chat}")
+    private String frontEndUrlLiveChat;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
@@ -39,7 +46,7 @@ public class SecurityConfiguration {
                             var cors = new CorsConfiguration();
                             cors.setAllowedHeaders(List.of("*"));
                             cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                            cors.setAllowedOrigins(List.of("http://localhost:4200", "/**"));
+                            cors.setAllowedOrigins(List.of(frontEndUrlAdmin, frontEndUrlLiveChat));
                             return cors;
                         }
                 ))

@@ -1,8 +1,11 @@
 package com.khanh.antimessenger.service.impl;
 
+import com.khanh.antimessenger.constant.KafkaEventType;
 import com.khanh.antimessenger.constant.SecurityConstant;
 import com.khanh.antimessenger.constant.VerificationType;
 import com.khanh.antimessenger.dto.RegisterRequestDto;
+import com.khanh.antimessenger.dto.UserKafkaDto;
+import com.khanh.antimessenger.dto.UserKafkaEvent;
 import com.khanh.antimessenger.dto.dtomapper.DtoMapper;
 import com.khanh.antimessenger.exception.AccountAlreadyActivated;
 import com.khanh.antimessenger.exception.InvalidPasswordException;
@@ -16,6 +19,7 @@ import com.khanh.antimessenger.service.AuthenticationService;
 import com.khanh.antimessenger.utilities.EmailService;
 import com.khanh.antimessenger.utilities.AccessTokenService;
 import com.khanh.antimessenger.service.MessAccountService;
+import com.khanh.antimessenger.utilities.KafkaProducerService;
 import com.khanh.antimessenger.utilities.RefreshTokenService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -52,7 +56,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final MessAccountService messAccountService;
     private final AccessTokenService accessTokenService;
     private final RefreshTokenService refreshTokenService;
-    @Value("${application.front-end.url}")
+    private final KafkaProducerService kafkaProducerService;
+    @Value("${application.front-end.url.admin}")
     private String frontEndUrl;
 
     @Override
@@ -71,6 +76,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             toAdd.setRole(roleUser);
             toAdd.setPassword(encoder.encode(toAdd.getPassword()));
             messAccountRepository.save(toAdd);
+
+            var userMapper = new DtoMapper<>(UserKafkaDto::new, MessAccount::new);
+            UserKafkaDto userKafkaDto = userMapper.fromEntity(toAdd);
+            kafkaProducerService.sendAddUserInfo(
+                    UserKafkaEvent.builder()
+                            .type(KafkaEventType.USER_ADD_EVENT)
+                            .user(userKafkaDto)
+                            .build());
 
             String verificationUrl = generateVerificationUrl(ACCOUNT);
             AccountVerification accountVerification = AccountVerification.builder()
@@ -95,6 +108,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         UserPrincipal userPrincipal = new UserPrincipal(loginAccount);
         HttpHeaders jwtHeader = generateJwtHeader(userPrincipal);
         addRefreshTokenCookie(userPrincipal, response, request);
+
         return Map.of("jwtHeader", jwtHeader, "account", loginAccount);
     }
 

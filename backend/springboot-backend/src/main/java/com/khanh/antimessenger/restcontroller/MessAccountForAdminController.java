@@ -95,6 +95,7 @@ public class MessAccountForAdminController extends AppExceptionHandler {
     @DeleteMapping ("/{id}")
     public ResponseEntity<HttpResponse> deleteAccount(@PathVariable long id) {
         messAccountService.deleteAccount(id);
+
         return ResponseEntity.created(null).body(
                 HttpResponse.builder()
                         .httpStatusCode(NO_CONTENT.value())

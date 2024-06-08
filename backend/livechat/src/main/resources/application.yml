@@ -13,22 +13,25 @@ spring:
     resources:
       add-mappings: false
   kafka:
-    producer:
-      bootstrap-servers: localhost:9092
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      retries: 1
-      acks: -1
-      properties:
-        idempotence: true
-        max.in.flight.requests.per.connection: 5
-#    consumer:
-#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-#      auto-offset-reset: earliest
-#      group-id: live-chat-group
+#    producer:
 #      bootstrap-servers: localhost:9092
-
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#      retries: 1
+#      acks: -1
+#      properties:
+#        idempotence: true
+#        max.in.flight.requests.per.connection: 5
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+#      group-id: live-chat-group
+      bootstrap-servers: localhost:9092
+      properties:
+        spring.json.trusted.packages: '*'
+        spring.json.value.default.type: 'com.khanh.livechat.model.dto.UserKafkaEvent'
+#        "[spring.json.value.default.type]": "com.khanh.livechat.model.HttpResponse"
   docker:
     compose:
       enabled: false
