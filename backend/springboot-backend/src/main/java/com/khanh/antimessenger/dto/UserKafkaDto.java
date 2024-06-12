@@ -1,12 +1,18 @@
 package com.khanh.antimessenger.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserKafkaDto {
-    private Long accountId;
+    private Long userId;
     private String firstName;
     private String lastName;
     private String username;

@@ -38,6 +38,8 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import static com.khanh.antimessenger.constant.FileConstant.*;
+import static com.khanh.antimessenger.constant.KafkaEventType.*;
+import static com.khanh.antimessenger.constant.KafkaTopicName.*;
 import static com.khanh.antimessenger.constant.SecurityConstant.PASSWORD_PATTERN;
 import static com.khanh.antimessenger.constant.VerificationType.RESET_PASSWORD_BY_ADMIN;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
@@ -70,14 +72,8 @@ public class MessAccountServiceImpl implements MessAccountService {
             saveProfileImage(toCreate, profile);
 
             // send to kafka consumer
-            var userMapper = new DtoMapper<>(UserKafkaDto::new, MessAccount::new);
-            UserKafkaDto userKafkaDto = userMapper.fromEntity(toCreate);
-            kafkaProducerService.sendAddUserInfo(
-                    UserKafkaEvent.builder()
-                            .user(userKafkaDto)
-                            .type(KafkaEventType.USER_ADD_EVENT)
-                            .build()
-            );
+            var username = toCreate.getUsername();
+            sendKafkaMessage(username, USER_ADD_EVENT, ADD_USER_TOPIC);
         } catch (Exception e) {
             throw new RuntimeException("An error occurred. Please try again");
         }
@@ -125,19 +121,15 @@ public class MessAccountServiceImpl implements MessAccountService {
 
         DtoMapper<CreateAccountRequestDto, MessAccount> mapper = new DtoMapper<>(CreateAccountRequestDto::new, MessAccount::new);
         toUpdate = mapper.toEntity(updateData, toUpdate);
+        toUpdate.setRole(toCheckRole);
 //        log.info(String.format("account dc update la: %s", toUpdate.toString()));
         messAccountRepository.save(toUpdate);
         updateProfileImage(toUpdate.getUsername(), profileImage);
 
         // send to kafka consumer
-        var userMapper = new DtoMapper<>(UserKafkaDto::new, MessAccount::new);
-        UserKafkaDto userKafkaDto = userMapper.fromEntity(toUpdate);
-        kafkaProducerService.sendUpdateUserInfo(
-                UserKafkaEvent.builder()
-                        .type(KafkaEventType.USER_UPDATE_EVENT)
-                        .user(userKafkaDto)
-                        .build()
-        );
+        var username = toUpdate.getUsername();
+        sendKafkaMessage(username, USER_UPDATE_EVENT, UPDATE_USER_TOPIC);
+
         return toUpdate;
     }
 
@@ -150,18 +142,30 @@ public class MessAccountServiceImpl implements MessAccountService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        var userMapper = new DtoMapper<>(UserKafkaDto::new, MessAccount::new);
-        UserKafkaDto userKafkaDto = userMapper.fromEntity(account);
+        var username = account.getUsername();
 
         messAccountRepository.deleteById(id);
 
+        sendKafkaMessage(username, USER_DELETE_EVENT, DELETE_USER_TOPIC);
+
         // send to kafka consumer
-        kafkaProducerService.sendDeleteUserInfo(
-                UserKafkaEvent.builder()
-                        .type(KafkaEventType.USER_DELETE_EVENT)
-                        .user(userKafkaDto)
-                        .build()
-        );
+    }
+
+    public void sendKafkaMessage(String username, KafkaEventType type, String topic) {
+        UserKafkaDto kafkaDto = UserKafkaDto.builder().build();
+        if (type == USER_DELETE_EVENT) {
+            kafkaDto.setUsername(username);
+        } else {
+            var user = getAccountByUserName(username);
+            var dtoMapper = new DtoMapper<>(UserKafkaDto::new, MessAccount::new);
+            kafkaDto = dtoMapper.fromEntity(user);
+            kafkaDto.setUserId(user.getAccountId());
+        }
+        var event = UserKafkaEvent.builder()
+                .type(type)
+                .user(kafkaDto)
+                .build();
+        kafkaProducerService.sendUserInfo(event, topic);
     }
 
     @Override

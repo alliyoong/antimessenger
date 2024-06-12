@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class UserKafkaDto {
-    private Long accountId;
+    private Long userId;
     private String firstName;
     private String lastName;
     private String username;

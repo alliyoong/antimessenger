@@ -1,4 +1,4 @@
-package com.khanh.livechat.model;
+package com.khanh.livechat.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;

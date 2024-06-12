@@ -1,3 +1,5 @@
+version: '3.1'
+
 services:
   # app:
   #   container_name: antimess
@@ -20,27 +22,32 @@ services:
       # SPRING_JPA_DATABASE-PLATFORM: org.hibernate.dialect.OracleDialect
       # SPRING_JPA_GENERATE-DDL: true
 
-  # mongodb:
-  #   image: mongo
-  #   container_name: mongo_db
-  #   ports:
-  #       - 27017:27017
-  #   volumes:
-  #       - mongo:/data
-  #   environment:
-  #     - MONGO_INITDB_ROOT_USERNAME=root
-  #     - MONGO_INITDB_ROOT_PASSWORD=root
-  # mongo-express:
-  #   image: mongo-express
-  #   container_name: mongo_express
-  #   ports:
-  #      - 8081:8081
-  #   environment:
-  #     - ME_CONFIG_BASICAUTH_USERNAME=root
-  #     - ME_CONFIG_BASICAUTH_PASSWORD=root
-  #     - ME_CONFIG_MONGODB_ADMINUSERNAME=root
-  #     - ME_CONFIG_MONGODB_ADMINPASSWORD=root
-  #     - ME_CONFIG_MONGODB_SERVER=mongodb
+  mongo:
+    image: mongo
+    restart: always
+    container_name: mongo_db
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodata:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: test
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    container_name: mongo_express
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+      ME_CONFIG_BASICAUTH_USERNAME: root
+      ME_CONFIG_BASICAUTH_PASSWORD: root
+         # - ME_CONFIG_MONGODB_SERVER=mongodb
+      ME_CONFIG_MONGODB_URL: mongodb://root:root@mongo:27017/
 
   zookeeper:
     image: bitnami/zookeeper
@@ -117,7 +124,7 @@ services:
   #   command: "kafkacat -b kafka:9092 -C -f '\nKey (%K bytes): %k\t\nValue (%S bytes): %s\n\Partition: %p\tOffset: %o\n--\n' -t test"
 
 volumes:
-  mongo: {}
+  mongodata:
   kafka_data:  
   zookeeper_data:
   zookeeper_log:

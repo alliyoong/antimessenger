@@ -6,6 +6,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
+  { path: '', component: HomeFriendlistComponent },
   { path: 'friendlist', component: HomeFriendlistComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },

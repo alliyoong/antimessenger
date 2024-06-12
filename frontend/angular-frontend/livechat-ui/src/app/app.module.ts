@@ -8,6 +8,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { JwtModule } from '@auth0/angular-jwt';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { ErrorStateMatcher } from '@angular/material/core';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,6 +23,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { NavHeaderComponent } from './nav-header/nav-header.component';
 import { HomeFriendlistComponent } from './home-friendlist/home-friendlist.component';
+import { CustomErrorMatcher } from './utilities/custom-error-matcher';
 // import { RegisterComponent } from './register/register.component';
 
 function configFactory(configService: ConfigService) {
@@ -69,6 +71,10 @@ export function tokenGetter() {
       useFactory: configFactory,
       deps: [ConfigService],
       multi: true
+    },
+    {
+      provide: ErrorStateMatcher,
+      useClass: CustomErrorMatcher
     },
   ],
   bootstrap: [AppComponent]

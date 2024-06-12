@@ -11,6 +11,8 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
+import static com.khanh.antimessenger.constant.KafkaTopicName.ADD_USER_TOPIC;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -18,26 +20,10 @@ import org.springframework.stereotype.Service;
 public class KafkaProducerService {
     private final KafkaTemplate<String, UserKafkaEvent> template;
 
-    public void sendAddUserInfo(UserKafkaEvent event) {
+    public void sendUserInfo(UserKafkaEvent event, String topic) {
         Message<UserKafkaEvent> message = MessageBuilder
                 .withPayload(event)
-                .setHeader(KafkaHeaders.TOPIC, KafkaTopicName.ADD_USER_TOPIC)
-                .build();
-        template.send(message);
-    }
-
-    public void sendUpdateUserInfo(UserKafkaEvent event) {
-        Message<UserKafkaEvent> message = MessageBuilder
-                .withPayload(event)
-                .setHeader(KafkaHeaders.TOPIC, KafkaTopicName.UPDATE_USER_TOPIC)
-                .build();
-        template.send(message);
-    }
-
-    public void sendDeleteUserInfo(UserKafkaEvent event) {
-        Message<UserKafkaEvent> message = MessageBuilder
-                .withPayload(event)
-                .setHeader(KafkaHeaders.TOPIC, KafkaTopicName.DELETE_USER_TOPIC)
+                .setHeader(KafkaHeaders.TOPIC, topic)
                 .build();
         template.send(message);
     }

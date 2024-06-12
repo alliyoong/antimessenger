@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -63,6 +64,7 @@ public class MessAccountForAdminController extends AppExceptionHandler {
         );
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN', 'ROLE_SUPERADMIN')")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<HttpResponse> addAccount(@Validated({OnCreate.class, OnUpdate.class}) @RequestPart(name = "account") CreateAccountRequestDto data,
                                                    @ValidUploadFile @RequestPart(name = "profileImage", required = false) MultipartFile file) {
@@ -77,6 +79,7 @@ public class MessAccountForAdminController extends AppExceptionHandler {
         );
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')")
     @PostMapping(path = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<HttpResponse> updateAccount(@PathVariable Long id,
                                                       @Validated(OnUpdate.class) @RequestPart(name = "account") CreateAccountRequestDto data,
@@ -92,6 +95,7 @@ public class MessAccountForAdminController extends AppExceptionHandler {
         );
     }
 
+    @PreAuthorize("hasRole('ROLE_SUPERADMIN')")
     @DeleteMapping ("/{id}")
     public ResponseEntity<HttpResponse> deleteAccount(@PathVariable long id) {
         messAccountService.deleteAccount(id);

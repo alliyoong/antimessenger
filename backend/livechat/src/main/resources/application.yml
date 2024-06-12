@@ -1,3 +1,4 @@
+
 spring:
   application:
     name: livechat
@@ -9,6 +10,7 @@ spring:
       host: localhost
       port: 27017
       database: livechat
+#      uri: mongodb://khanh:khanh@localhost:27017/livechat?authSource=admin
   web:
     resources:
       add-mappings: false
@@ -31,7 +33,7 @@ spring:
       properties:
         spring.json.trusted.packages: '*'
         spring.json.value.default.type: 'com.khanh.livechat.model.dto.UserKafkaEvent'
-#        "[spring.json.value.default.type]": "com.khanh.livechat.model.HttpResponse"
+#        "[spring.json.value.default.type]": "com.khanh.livechat.model.dto.HttpResponse"
   docker:
     compose:
       enabled: false

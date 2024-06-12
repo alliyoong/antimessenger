@@ -25,6 +25,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -39,6 +40,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import static com.khanh.antimessenger.constant.KafkaTopicName.ADD_USER_TOPIC;
 import static com.khanh.antimessenger.constant.RoleType.ROLE_USER;
 import static com.khanh.antimessenger.constant.SecurityConstant.PASSWORD_PATTERN;
 import static com.khanh.antimessenger.constant.SecurityConstant.VERIFICATION_URL_EXPIRATION_TIME;
@@ -46,6 +48,7 @@ import static com.khanh.antimessenger.constant.VerificationType.ACCOUNT;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final MessAccountRepository messAccountRepository;
     private final RoleRepository roleRepository;
@@ -75,15 +78,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
             toAdd.setRole(roleUser);
             toAdd.setPassword(encoder.encode(toAdd.getPassword()));
-            messAccountRepository.save(toAdd);
+            var created = messAccountRepository.save(toAdd);
 
             var userMapper = new DtoMapper<>(UserKafkaDto::new, MessAccount::new);
-            UserKafkaDto userKafkaDto = userMapper.fromEntity(toAdd);
-            kafkaProducerService.sendAddUserInfo(
+            UserKafkaDto userKafkaDto = userMapper.fromEntity(created);
+            userKafkaDto.setUserId(created.getAccountId());
+            kafkaProducerService.sendUserInfo(
                     UserKafkaEvent.builder()
                             .type(KafkaEventType.USER_ADD_EVENT)
                             .user(userKafkaDto)
-                            .build());
+                            .build(),
+                    ADD_USER_TOPIC
+            );
 
             String verificationUrl = generateVerificationUrl(ACCOUNT);
             AccountVerification accountVerification = AccountVerification.builder()

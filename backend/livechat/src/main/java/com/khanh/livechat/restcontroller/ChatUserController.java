@@ -1,6 +1,6 @@
 package com.khanh.livechat.restcontroller;
 
-import com.khanh.livechat.model.HttpResponse;
+import com.khanh.livechat.model.dto.HttpResponse;
 import com.khanh.livechat.model.dto.ChatUserLogin;
 import com.khanh.livechat.model.dto.ChatUserRegister;
 import com.khanh.livechat.service.KafkaConsumerService;

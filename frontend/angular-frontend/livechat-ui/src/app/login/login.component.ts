@@ -56,12 +56,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     const fd = new FormData();
     fd.append('username', this.loginForm.getRawValue().username);
     fd.append('password', this.loginForm.getRawValue().password);
-    console.log(fd.get('username'));
-    console.log(fd.get('password'));
     this.userService.login(fd).pipe(take(1)).subscribe({
       next: res => {
-        // const token = res.headers.get(HeaderType.JWT_TOKEN);
-        // const currentUser: User = res.body?.data;
+        const token = res.headers.get(HeaderType.JWT_TOKEN);
+        const currentUser: User = res.body?.data;
+        this.userService.cacheToken(token);
+        this.userService.cacheUser(currentUser);
         this.notiService.sendNoti(NotificationType.SUCCESS, res.body!.message);
         this.showLoading = false;
         this.router.navigate(['/friendlist']);

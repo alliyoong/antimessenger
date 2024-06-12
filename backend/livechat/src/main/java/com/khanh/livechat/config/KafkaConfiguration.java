@@ -13,21 +13,21 @@ import static com.khanh.livechat.constant.KafkaTopicName.UPDATE_USER_TOPIC;
 public class KafkaConfiguration {
 
     @Bean
-    public NewTopic addUserTopic() {
+    NewTopic addUserTopic() {
         return TopicBuilder
                 .name(ADD_USER_TOPIC)
                 .build();
     }
 
     @Bean
-    public NewTopic updateUserTopic() {
+    NewTopic updateUserTopic() {
         return TopicBuilder
                 .name(UPDATE_USER_TOPIC)
                 .build();
     }
 
     @Bean
-    public CommonErrorHandler commonErrorHandler() {
+    CommonErrorHandler commonErrorHandler() {
         return new KafkaErrorHandler();
     }
 }

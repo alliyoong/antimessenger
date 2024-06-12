@@ -13,32 +13,50 @@
       <!-- <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" -->
       <!-- *ngIf="isHandset$ | async"> -->
       <!-- <mat-icon aria-label="Side nav toggle icon">menu</mat-icon> -->
-      <!-- </button> -->
-      <span>
-        <a routerLink="friendlist">antimess</a>
-      </span>
+      <div style="padding:0px 0px 10px 0px; width: 20%;">
+        <div class="mat-title" style="margin-bottom:2px;"><a routerLink="friendlist">Antimess</a></div>
+        <div class="mat-subheading-4" style="line-height:.6rem;color: grey;">Connect with your friends</div>
+      </div> <!-- </button> -->
+      <!-- <span> -->
+      <!-- <a routerLink="friendlist">antimess</a> -->
+      <!-- </span> -->
       <span class="item-spacer"></span>
-      <button mat-icon-button matTooltip="Notifications">
-        <mat-icon>notifications</mat-icon>
+      <button mat-icon-button (click)="openSearch()" [style.display]="toggleSearch?'none':'inherit'">
+        <mat-icon>search</mat-icon>
       </button>
-      <button mat-icon-button matTooltip="My Account" [matMenuTriggerFor]="userAccountMenu">
-        <mat-icon>account_circle</mat-icon>
-      </button>
-      <mat-menu #userAccountMenu [overlapTrigger]="false" yPosition="below">
-        <button mat-menu-item routerLink="#">
-          <mat-icon>person</mat-icon><span>My Account</span>
+      <div class="search-bar-container" [style.display]="toggleSearch?'inherit':'none'">
+        <button mat-icon-button (click)="searchUser()">
+          <mat-icon>search</mat-icon>
         </button>
-        <button mat-menu-item routerLink="#">
-          <mat-icon>settings</mat-icon><span>Settings</span>
+        <input class="search-input" type="text" placeholder="Search username" [(ngModel)]="searchText" #searchBar>
+        <button mat-icon-button (click)="closeSearch()">
+          <mat-icon>close</mat-icon>
         </button>
-        <button mat-menu-item routerLink="#">
-          <mat-icon>help</mat-icon><span>Help</span>
+      </div>
+      <span class="item-spacer"></span>
+      <div style="width: 20%; display: flex; flex-direction: row-reverse;">
+        <button mat-icon-button matTooltip="My Account" [matMenuTriggerFor]="userAccountMenu">
+          <mat-icon>account_circle</mat-icon>
         </button>
-        <mat-divider></mat-divider>
-        <button mat-menu-item routerLink="#">
-          <mat-icon>exit_to_app</mat-icon>Logout
+        <mat-menu #userAccountMenu [overlapTrigger]="false" yPosition="below">
+          <button mat-menu-item routerLink="#">
+            <mat-icon>person</mat-icon><span>My Account</span>
+          </button>
+          <button mat-menu-item routerLink="#">
+            <mat-icon>settings</mat-icon><span>Settings</span>
+          </button>
+          <button mat-menu-item routerLink="#">
+            <mat-icon>help</mat-icon><span>Help</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item routerLink="#">
+            <mat-icon>exit_to_app</mat-icon>Logout
+          </button>
+        </mat-menu>
+        <button mat-icon-button matTooltip="Notifications">
+          <mat-icon>notifications</mat-icon>
         </button>
-      </mat-menu>
+      </div>
     </mat-toolbar>
     <!-- Add Content Here -->
     <router-outlet></router-outlet>
