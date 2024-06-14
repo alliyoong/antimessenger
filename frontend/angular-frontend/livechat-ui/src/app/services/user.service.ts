@@ -26,7 +26,7 @@ export class UserService {
 
   searchUser(value: string): Observable<CustomHttpResponse> {
     return this.http.get<CustomHttpResponse>(
-      `${this.livechatUrl}/${value}`
+      `${this.livechatUrl}/user/search/${value}`
     );
   }
 

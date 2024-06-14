@@ -1,0 +1,42 @@
+<div class="wrapper">
+
+  <!-- <nav mat-tab-nav-bar [backgroundColor]="background" [tabPanel]="tabPanel"> -->
+  <!--   <div *ngFor="let link of links"> -->
+  <!--     <a mat-tab-link (click)="activeLink = link" [active]="activeLink == link"> {{link}} </a> -->
+  <!--   </div> -->
+  <!-- </nav> -->
+  <!-- <mat-tab-nav-panel #tabPanel> -->
+  <!-- </mat-tab-nav-panel> -->
+
+  <mat-tab-group [(selectedIndex)])>
+    <mat-tab label="Discover">
+      <ng-template matTabContent *ngTemplateOutlet="userListTemplate; context: {userList: discoverList}">
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="FriendList">
+      <ng-template matTabContent *ngTemplateOutlet="userListTemplate; context: {userList: friendList}">
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Pending Requests">
+      <ng-template matTabContent *ngTemplateOutlet="userListTemplate; context: {userList: pendingRequests}">
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Waitlist">
+      <ng-template matTabContent *ngTemplateOutlet="userListTemplate; context: {userList: waitList}">
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+
+</div>
+
+<ng-template #userListTemplate let-userList="userList">
+  <div class="list-container" *ngIf="userList.length">
+    <div class="item" *ngFor="let user of userList">
+      <span>{{user.username}}</span>
+    </div>
+  </div>
+  <span *ngIf="!userList.length">There is no user on this list</span>
+</ng-template>

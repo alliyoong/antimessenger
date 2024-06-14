@@ -22,7 +22,7 @@ import { ConfigService } from './services/config.service';
 import { HttpClientModule } from '@angular/common/http';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { NavHeaderComponent } from './nav-header/nav-header.component';
-import { HomeFriendlistComponent } from './home-friendlist/home-friendlist.component';
+import { HomeComponent } from './home/home.component';
 import { CustomErrorMatcher } from './utilities/custom-error-matcher';
 // import { RegisterComponent } from './register/register.component';
 
@@ -37,7 +37,6 @@ export function tokenGetter() {
 @NgModule({
   declarations: [
     AppComponent,
-    HomeFriendlistComponent,
     NavHeaderComponent,
     PageNotFoundComponent,
     // RegisterComponent

@@ -23,18 +23,19 @@ export class NavHeaderComponent {
   constructor(private breakpointObserver: BreakpointObserver, private sharedService: SharedService) { }
 
   openSearch(): void {
-    this.searchBar.nativeElement.focus();
     this.toggleSearch = true;
+    setTimeout(() => {
+      this.searchBar.nativeElement.focus();
+    });
   }
 
   closeSearch(): void {
     this.searchText = '';
-    this.sharedService.searchValue = '';
     this.toggleSearch = false;
   }
 
   searchUser(): void {
-    this.sharedService.searchValue = this.searchText;
+    this.sharedService.searchSubject.next(this.searchText);
   }
 
 }

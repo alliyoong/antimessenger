@@ -5,6 +5,9 @@ import com.khanh.livechat.repository.ChatUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ChatUserService {
@@ -32,6 +35,14 @@ public class ChatUserService {
 
     public void deleteUserByUsername(String username) {
         userRepository.deleteChatUserByUsername(username);
+    }
+
+    public List<ChatUser> searchUserByUsername(String searchValue) {
+        List<ChatUser> users = new ArrayList<>();
+        if (searchValue != "") {
+            users = userRepository.findChatUserByUsername(searchValue);
+        }
+        return users;
     }
 
 }

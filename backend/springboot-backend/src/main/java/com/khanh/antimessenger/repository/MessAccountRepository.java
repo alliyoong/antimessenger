@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface MessAccountRepository extends JpaRepository<MessAccount,Long> {
     Optional<MessAccount> findMessAccountByUsername(String username);
-    Optional<MessAccount> findMessAccountByEmail(String username);
+    Optional<MessAccount> findMessAccountByEmail(String email);
     Optional<MessAccount> findMessAccountByAccountId(Long id);
     Integer deleteMessAccountByAccountId(Long id);
 }

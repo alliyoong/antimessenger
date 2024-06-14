@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.userService.cacheUser(currentUser);
         this.notiService.sendNoti(NotificationType.SUCCESS, res.body!.message);
         this.showLoading = false;
-        this.router.navigate(['/friendlist']);
+        this.router.navigate(['/home']);
       },
       error: res => {
         const message = res.message || res.body!.message;
