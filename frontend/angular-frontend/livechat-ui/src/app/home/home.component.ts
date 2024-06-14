@@ -56,7 +56,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   waitList: User[] = [];
   pendingRequests: User[] = [];
   friendList: User[] = [];
-  selectedIndex: number = 2;
 
   constructor(private userService: UserService, private sharedService: SharedService) {
   }
