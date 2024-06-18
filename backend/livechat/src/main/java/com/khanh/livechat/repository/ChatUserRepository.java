@@ -16,4 +16,5 @@ public interface ChatUserRepository extends MongoRepository<ChatUser, String> {
             "{'firstName': {$regex: ?0, $options: 'i'}}, " +
             "{'lastName': {$regex: ?0, $options: 'i'}}]}")
     List<ChatUser> findChatUserByUsername(String username);
+
 }

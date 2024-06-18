@@ -1,0 +1,15 @@
+export interface MessAccount {
+  accountId: number,
+  email: string,
+  firstName: string,
+  imageUrl?: string,
+  lastName: string,
+  username: string,
+  address?: string,
+  bio?: string,
+  phone?: string,
+  isEnabled: number,
+  isNonLocked: number,
+  createdAt: Date,
+  lastLoginDateDisplay?: Date,
+}

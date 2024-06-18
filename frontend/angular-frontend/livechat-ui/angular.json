@@ -94,10 +94,10 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "livechat-ui:build:production"
+              "buildTarget": "livechat-ui:build:production"
             },
             "development": {
-              "browserTarget": "livechat-ui:build:development"
+              "buildTarget": "livechat-ui:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -105,7 +105,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "livechat-ui:build"
+            "buildTarget": "livechat-ui:build"
           }
         },
         "test": {

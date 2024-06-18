@@ -3,11 +3,33 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { SharedService } from '../services/shared.service';
+import { SharedState } from '../domain/shared-state';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatCommonModule } from '@angular/material/core';
+import { MatButtonModule } from '@angular/material/button';
+import { FormsModule } from '@angular/forms';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-nav-header',
   templateUrl: './nav-header.component.html',
-  styleUrls: ['./nav-header.component.scss']
+  styleUrls: ['./nav-header.component.scss'],
+  standalone: true,
+  imports: [
+    MatSidenavModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatCommonModule,
+    MatButtonModule,
+    FormsModule,
+    MatMenuModule,
+    MatDividerModule,
+    RouterModule,
+  ]
 })
 export class NavHeaderComponent {
   searchText: string = '';
@@ -35,7 +57,9 @@ export class NavHeaderComponent {
   }
 
   searchUser(): void {
-    this.sharedService.searchSubject.next(this.searchText);
+    const sharedState: SharedState = {};
+    sharedState.searchValue = this.searchText;
+    this.sharedService.searchSubject.next(sharedState);
   }
 
 }

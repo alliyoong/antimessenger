@@ -1,5 +1,5 @@
 export interface User {
-  userId?: string,
+  userId?: number,
   username: string,
   firstName: string,
   lastName: string,
@@ -7,7 +7,7 @@ export interface User {
   email: string,
   bio?: string,
   address?: string,
-  createdAt?: string,
+  createdAt?: Date,
   imageUrl?: string,
-  imageFile?: string,
+  lastLoginDateDisplay?: Date
 }

@@ -1,8 +1,9 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { appConfig } from './app.config';
 
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+// import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
 import { JwtModule } from '@auth0/angular-jwt';
@@ -19,11 +20,13 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { ConfigService } from './services/config.service';
-import { HttpClientModule } from '@angular/common/http';
+// import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { NavHeaderComponent } from './nav-header/nav-header.component';
-import { HomeComponent } from './home/home.component';
+// import { HomeComponent } from './home/home.component';
 import { CustomErrorMatcher } from './utilities/custom-error-matcher';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { jwtInterceptor } from './interceptors/jwt.interceptor';
 // import { RegisterComponent } from './register/register.component';
 
 function configFactory(configService: ConfigService) {
@@ -36,8 +39,8 @@ export function tokenGetter() {
 
 @NgModule({
   declarations: [
-    AppComponent,
-    NavHeaderComponent,
+    // AppComponent,
+    // NavHeaderComponent,
     PageNotFoundComponent,
     // RegisterComponent
   ],
@@ -49,7 +52,7 @@ export function tokenGetter() {
     FormsModule,
     BrowserAnimationsModule,
     LayoutModule,
-    HttpClientModule,
+    // HttpClientModule,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
@@ -76,6 +79,6 @@ export function tokenGetter() {
       useClass: CustomErrorMatcher
     },
   ],
-  bootstrap: [AppComponent]
+  // bootstrap: [AppComponent]
 })
 export class AppModule { }

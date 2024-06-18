@@ -14,6 +14,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { CustomValidators } from '../validators/custom-validators';
 import { RouterModule } from '@angular/router';
+import { MessAccount } from '../domain/mess-account';
 
 @Component({
   selector: 'app-login',
@@ -59,7 +60,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.userService.login(fd).pipe(take(1)).subscribe({
       next: res => {
         const token = res.headers.get(HeaderType.JWT_TOKEN);
-        const currentUser: User = res.body?.data;
+        const currentUser: MessAccount = res.body?.data.account;
         this.userService.cacheToken(token);
         this.userService.cacheUser(currentUser);
         this.notiService.sendNoti(NotificationType.SUCCESS, res.body!.message);
@@ -67,7 +68,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.router.navigate(['/home']);
       },
       error: res => {
-        const message = res.message || res.body!.message;
+        console.log(res);
+        const message = res.error.message;
         this.notiService.sendNoti(NotificationType.ERROR, message);
         this.showLoading = false;
       }

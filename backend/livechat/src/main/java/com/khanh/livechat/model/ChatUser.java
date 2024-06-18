@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Document("chat_users")
 @Data
@@ -33,7 +34,22 @@ public class ChatUser {
     private String imageUrl;
     private Integer isEnabled;
     private Integer isNonLocked;
-    private List<Long> friendList;
-    private List<Long> pendingRequests;
-    private List<Long> waitList;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof ChatUser)) {
+            return false;
+        }
+        ChatUser other = (ChatUser) o;
+        return other.userId == this.userId;
+    }
+
+    @Override
+    public int hashCode() {
+        return 31*(this.username.hashCode() + this.id.hashCode()) ;
+    }
+
 }

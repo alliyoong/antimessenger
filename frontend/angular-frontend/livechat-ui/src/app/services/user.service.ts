@@ -6,6 +6,7 @@ import { Observable, shareReplay } from 'rxjs';
 import { CustomHttpResponse } from '../domain/custom-http-response';
 import { User } from '../domain/user';
 import { SharedService } from './shared.service';
+import { MessAccount } from '../domain/mess-account';
 
 @Injectable({
   providedIn: 'root'
@@ -30,9 +31,42 @@ export class UserService {
     );
   }
 
+  addFriend(userId: number, friendId: number): Observable<CustomHttpResponse> {
+    return this.http.get<CustomHttpResponse>(
+      `${this.livechatUrl}/user/add-friend/${userId}/${friendId}`
+    );
+  }
+
   getFriendList(id: string): Observable<CustomHttpResponse> {
     return this.http.get<CustomHttpResponse>(
       `${this.livechatUrl}/friendlist/${id}`,
+      {}
+    ).pipe(
+      shareReplay(1)
+    );
+  }
+
+  getPendingRequests(id: string): Observable<CustomHttpResponse> {
+    return this.http.get<CustomHttpResponse>(
+      `${this.livechatUrl}/pending-requests/${id}`,
+      {}
+    ).pipe(
+      shareReplay(1)
+    );
+  }
+
+  getWaitList(id: string): Observable<CustomHttpResponse> {
+    return this.http.get<CustomHttpResponse>(
+      `${this.livechatUrl}/wait-list/${id}`,
+      {}
+    ).pipe(
+      shareReplay(1)
+    );
+  }
+
+  getDiscover(id: string): Observable<CustomHttpResponse> {
+    return this.http.get<CustomHttpResponse>(
+      `${this.livechatUrl}/discover/${id}`,
       {}
     ).pipe(
       shareReplay(1)
@@ -75,8 +109,9 @@ export class UserService {
     localStorage.setItem('antimess-token', this.token!);
   }
 
-  cacheUser(account: User): void {
-    this.currentUser = account;
+  cacheUser(account: MessAccount): void {
+    const user = this.mapMessAccountToUser(account);
+    this.currentUser = user;
     localStorage.setItem('antimess-user', JSON.stringify(this.currentUser));
   }
 
@@ -89,6 +124,21 @@ export class UserService {
 
   loadCurrentToken(): void {
     this.token = localStorage.getItem('antimess-token');
+  }
+
+  mapMessAccountToUser(account: MessAccount): User {
+    let user: { [k: string]: any } = {};
+    let key: keyof MessAccount;
+    for (key in account) {
+      if (key !== 'accountId') {
+        user = {
+          ...user,
+          [key]: account[key]
+        }
+      }
+    }
+    user['userId'] = account.accountId;
+    return user as User;
   }
 
   getCurrentToken(): string {
@@ -110,4 +160,9 @@ export class UserService {
     }
     return false;
   }
+
+  isContainUser(toCheck: User, list: User[]): boolean {
+    return !!list.find(user => user.userId === toCheck.userId);
+  }
+
 }

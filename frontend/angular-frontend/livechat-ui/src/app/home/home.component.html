@@ -8,7 +8,7 @@
   <!-- <mat-tab-nav-panel #tabPanel> -->
   <!-- </mat-tab-nav-panel> -->
 
-  <mat-tab-group>
+  <mat-tab-group [(selectedIndex)]="activeTab">
     <mat-tab label="Discover">
       <ng-template matTabContent *ngTemplateOutlet="userListTemplate; context: {userList: discoverList}">
       </ng-template>
@@ -34,8 +34,17 @@
 
 <ng-template #userListTemplate let-userList="userList">
   <div class="list-container" *ngIf="userList.length">
-    <div class="item" *ngFor="let user of userList">
-      <span>{{user.username}}</span>
+    <div class="user-content" *ngFor="let user of userList">
+      <div class="content-item">
+        <img src={{user.imageUrl}} alt="">
+      </div>
+      <div class="content-item" [ngStyle]="{flex: '1'}">
+        <button class="username-click" (click)="showUserDetail(user)"><span>{{user.lastName}}
+            {{user.firstName}}</span></button>
+      </div>
+      <div class="content-item">
+        <button type="button" mat-button (click)="addFriend(user)">Add Friend</button>
+      </div>
     </div>
   </div>
   <span *ngIf="!userList.length">There is no user on this list</span>

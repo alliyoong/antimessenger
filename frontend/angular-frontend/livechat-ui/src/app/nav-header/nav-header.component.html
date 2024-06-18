@@ -40,6 +40,9 @@
           <mat-icon>account_circle</mat-icon>
         </button>
         <mat-menu #userAccountMenu [overlapTrigger]="false" yPosition="below">
+          <button mat-menu-item routerLink="login">
+            <mat-icon>input</mat-icon><span>Login another account</span>
+          </button>
           <button mat-menu-item routerLink="#">
             <mat-icon>person</mat-icon><span>My Account</span>
           </button>

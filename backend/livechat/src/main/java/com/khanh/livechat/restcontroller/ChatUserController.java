@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
 @Slf4j
@@ -41,28 +41,27 @@ public class ChatUserController {
         );
     }
 
-    @PostMapping("register")
-    public ResponseEntity<HttpResponse> register(
-            @RequestParam("username") String username,
-            @RequestParam("firstName") String firstName,
-            @RequestParam("lastName") String lastName,
-            @RequestParam("password") String password,
-            @RequestParam("email") String email
-    ) {
-        var user = ChatUserRegister.builder()
-                .username(username)
-                .password(password)
-                .firstName(firstName)
-                .lastName(lastName)
-                .email(email)
-                .build();
-        log.info("user register la: {}", user.toString());
+    @GetMapping ("/add-friend/{userId}/{friendId}")
+    public ResponseEntity<HttpResponse> addFriend(@PathVariable("userId") Long userId, @PathVariable("friendId") Long friendId) {
+        String message = userService.addFriend(userId, friendId);
         return ResponseEntity.created(null).body(
                 HttpResponse.builder()
-                        .data(Map.of("user", user))
-                        .httpStatus(CREATED)
-                        .httpStatusCode(CREATED.value())
-                        .message("You have registered successfully")
+                        .httpStatusCode(OK.value())
+                        .httpStatus(OK)
+                        .message(message)
+                        .build()
+        );
+    }
+
+    @GetMapping("/friend-list/{userId}")
+    public ResponseEntity<HttpResponse> getFriendList(@PathVariable("userId") Long userId) {
+        var data = userService.getFriendList(userId);
+        return ResponseEntity.created(null).body(
+                HttpResponse.builder()
+                        .httpStatusCode(OK.value())
+                        .httpStatus(OK)
+                        .data(Map.of("friendList", data))
+                        .message("Successfully retrieve data")
                         .build()
         );
     }
