@@ -37,27 +37,33 @@ export class UserService {
     );
   }
 
-  getFriendList(id: string): Observable<CustomHttpResponse> {
+  cancelRequest(userId: number, friendId: number): Observable<CustomHttpResponse> {
     return this.http.get<CustomHttpResponse>(
-      `${this.livechatUrl}/friendlist/${id}`,
+      `${this.livechatUrl}/user/cancel-request/${userId}/${friendId}`
+    );
+  }
+
+  getFriendList(id: number): Observable<CustomHttpResponse> {
+    return this.http.get<CustomHttpResponse>(
+      `${this.livechatUrl}/user/friend-list/${id}`,
       {}
     ).pipe(
       shareReplay(1)
     );
   }
 
-  getPendingRequests(id: string): Observable<CustomHttpResponse> {
+  getPendingRequests(id: number): Observable<CustomHttpResponse> {
     return this.http.get<CustomHttpResponse>(
-      `${this.livechatUrl}/pending-requests/${id}`,
+      `${this.livechatUrl}/user/pending-requests/${id}`,
       {}
     ).pipe(
       shareReplay(1)
     );
   }
 
-  getWaitList(id: string): Observable<CustomHttpResponse> {
+  getWaitList(id: number): Observable<CustomHttpResponse> {
     return this.http.get<CustomHttpResponse>(
-      `${this.livechatUrl}/wait-list/${id}`,
+      `${this.livechatUrl}/user/wait-list/${id}`,
       {}
     ).pipe(
       shareReplay(1)

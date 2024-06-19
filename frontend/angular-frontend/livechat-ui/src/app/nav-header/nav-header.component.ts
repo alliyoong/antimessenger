@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { RouterModule } from '@angular/router';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-nav-header',
@@ -29,6 +30,7 @@ import { RouterModule } from '@angular/router';
     MatMenuModule,
     MatDividerModule,
     RouterModule,
+    MatTooltipModule
   ]
 })
 export class NavHeaderComponent {

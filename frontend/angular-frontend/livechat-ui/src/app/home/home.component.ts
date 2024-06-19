@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
 import { Subscription, mergeMap } from 'rxjs';
 import { SnackbarNotiService } from '../services/snackbar-noti.service';
 import { NotificationType } from '../constants/notification-type.enum';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-home',
@@ -21,7 +23,9 @@ import { NotificationType } from '../constants/notification-type.enum';
     MatTabsModule,
     CommonModule,
     MatButtonModule,
-    MatDialogModule
+    MatDialogModule,
+    MatIconModule,
+    MatTooltipModule
   ]
 })
 export class HomeComponent implements OnInit, OnDestroy {
@@ -42,8 +46,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const currentUser = this.userService.getCurrentUser();
-    if (currentUser) {
-      this.userService.getFriendList(String(currentUser.userId));
+    const currentUserId = !!currentUser && currentUser?.userId;
+    if (currentUserId) {
+      this.getFriendList(currentUserId);
+      this.getWaitList(currentUserId);
+      this.getPendingRequests(currentUserId);
     }
 
     this.subscriptions.push(this.sharedService.searchSubject$.pipe(
@@ -62,6 +69,45 @@ export class HomeComponent implements OnInit, OnDestroy {
     }));
   }
 
+  getFriendList(userId: number): void {
+    this.subscriptions.push(this.userService.getFriendList(userId).subscribe({
+      next: res => {
+        console.log(res);
+        this.friendList = res.data.friendList;
+      },
+      error: res => {
+        console.log(res);
+        this.notiService.sendNoti(NotificationType.ERROR, res.message);
+      }
+    }));
+  }
+
+  getWaitList(userId: number): void {
+    this.subscriptions.push(this.userService.getWaitList(userId).subscribe({
+      next: res => {
+        console.log(res);
+        this.waitList = res.data.waitList;
+      },
+      error: res => {
+        console.log(res);
+        this.notiService.sendNoti(NotificationType.ERROR, res.message);
+      }
+    }));
+  }
+
+  getPendingRequests(userId: number): void {
+    this.subscriptions.push(this.userService.getPendingRequests(userId).subscribe({
+      next: res => {
+        console.log(res);
+        this.pendingRequests = res.data.pendingRequests;
+      },
+      error: res => {
+        console.log(res);
+        this.notiService.sendNoti(NotificationType.ERROR, res.message);
+      }
+    }));
+  }
+
   addFriend(friend: User): void {
     const userId = this.userService.getCurrentUser()?.userId || -1;
     const friendId = friend.userId!;
@@ -72,10 +118,24 @@ export class HomeComponent implements OnInit, OnDestroy {
       error: res => {
         this.notiService.sendNoti(NotificationType.ERROR, res.error.message);
       }
-    }
+    }));
+  }
 
-    ))
+  startChatting(user: User) {
+    this.route.navigate(['/chat'])
+  }
 
+  cancelRequest(friend: User): void {
+    const userId = this.userService.getCurrentUser()?.userId || -1;
+    const friendId = friend.userId!;
+    this.subscriptions.push(this.userService.cancelRequest(userId, friendId).subscribe({
+      next: res => {
+        this.notiService.sendNoti(NotificationType.SUCCESS, res.message);
+      },
+      error: res => {
+        this.notiService.sendNoti(NotificationType.ERROR, res.error.message);
+      }
+    }))
   }
 
   showUserDetail(user: User): void {

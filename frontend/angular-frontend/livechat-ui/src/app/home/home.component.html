@@ -42,8 +42,32 @@
         <button class="username-click" (click)="showUserDetail(user)"><span>{{user.lastName}}
             {{user.firstName}}</span></button>
       </div>
-      <div class="content-item">
-        <button type="button" mat-button (click)="addFriend(user)">Add Friend</button>
+      <div class="content-item" *ngIf="userList == discoverList">
+        <button type="button" class="add-friend-button" matTooltip="send request" mat-icon-button
+          (click)="addFriend(user)">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+
+      <div class="content-item" *ngIf="userList == waitList">
+        <button type="button" class="accept-request-button" matTooltip="accept request" mat-icon-button
+          (click)="addFriend(user)">
+          <mat-icon>check</mat-icon>
+        </button>
+      </div>
+
+      <div class="content-item" *ngIf="userList == pendingRequests">
+        <button type="button" class="cancel-request-button" matTooltip="cancel request" mat-icon-button
+          (click)="cancelRequest(user)">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </div>
+
+      <div class="content-item" *ngIf="userList == friendList">
+        <button type="button" class="send-message-button" matTooltip="start chatting" mat-icon-button
+          (click)="startChatting(user)">
+          <mat-icon>send</mat-icon>
+        </button>
       </div>
     </div>
   </div>
