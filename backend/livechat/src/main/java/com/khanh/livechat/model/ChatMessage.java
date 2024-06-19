@@ -22,5 +22,6 @@ public class ChatMessage {
     private MessageType type;
     private String chatRoomId;
     private String sender;
+    private String sessionId;
     private LocalDateTime createdAt;
 }

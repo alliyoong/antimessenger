@@ -12,19 +12,19 @@ import static com.khanh.livechat.constant.KafkaTopicName.UPDATE_USER_TOPIC;
 @Configuration
 public class KafkaConfiguration {
 
-    @Bean
-    NewTopic addUserTopic() {
-        return TopicBuilder
-                .name(ADD_USER_TOPIC)
-                .build();
-    }
-
-    @Bean
-    NewTopic updateUserTopic() {
-        return TopicBuilder
-                .name(UPDATE_USER_TOPIC)
-                .build();
-    }
+//    @Bean
+//    NewTopic addUserTopic() {
+//        return TopicBuilder
+//                .name(ADD_USER_TOPIC)
+//                .build();
+//    }
+//
+//    @Bean
+//    NewTopic updateUserTopic() {
+//        return TopicBuilder
+//                .name(UPDATE_USER_TOPIC)
+//                .build();
+//    }
 
     @Bean
     CommonErrorHandler commonErrorHandler() {

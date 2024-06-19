@@ -94,7 +94,7 @@ public class ChatUserService {
     }
 
     public List<ChatUser> getFriendList(Long userId) {
-        List<UserRelationship> relates = relationshipRepository.findFriendList(userId);
+        List<UserRelationship> relates = relationshipRepository.findFriendList(userId, RelationshipStatus.FRIEND.name());
 
         List<Long> friendIds = relates.stream()
                 .map(item -> Objects.equals(item.getSenderId(), userId) ? item.getReceiverId() : item.getSenderId()).toList();
@@ -102,6 +102,18 @@ public class ChatUserService {
         List<ChatUser> friendList = friendIds.stream().map(id -> userRepository.findChatUserByUserId(id)
                 .orElse(null)).collect(Collectors.toList());
         return friendList;
+    }
+
+    public List<ChatUser> getWaitList(Long userId) {
+        List<ChatUser> waitList = relationshipRepository.findWaitList(userId, RelationshipStatus.PENDING.name()).stream()
+                .map(item -> userRepository.findChatUserByUserId(item.getSenderId()).orElse(null)).collect(Collectors.toList());
+        return waitList;
+    }
+
+    public List<ChatUser> getPendingRequests(Long userId) {
+        List<ChatUser> pendingRequests = relationshipRepository.findPendingRequests(userId, RelationshipStatus.PENDING.name()).stream()
+                .map(item -> userRepository.findChatUserByUserId(item.getReceiverId()).orElse(null)).collect(Collectors.toList());
+        return pendingRequests;
     }
 
     private UserRelationship checkRelation(Long senderId, Long receiverId) {
@@ -113,4 +125,12 @@ public class ChatUserService {
         return relation;
     }
 
+    public void removeRelation(Long userId, Long friendId) {
+        UserRelationship relation = relationshipRepository.
+                findBySenderAndReceiverAndStatus(userId, friendId, RelationshipStatus.PENDING.name())
+                .orElseThrow(
+                        () -> new ResourceNotFound("relation", "friendId", friendId)
+                );
+        relationshipRepository.delete(relation);
+    }
 }

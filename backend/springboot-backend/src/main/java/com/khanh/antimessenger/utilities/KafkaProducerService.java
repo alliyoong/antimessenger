@@ -1,6 +1,5 @@
 package com.khanh.antimessenger.utilities;
 
-import com.khanh.antimessenger.constant.KafkaTopicName;
 import com.khanh.antimessenger.dto.UserKafkaEvent;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +9,6 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
-
-import static com.khanh.antimessenger.constant.KafkaTopicName.ADD_USER_TOPIC;
 
 @Service
 @Slf4j
@@ -25,6 +22,10 @@ public class KafkaProducerService {
                 .withPayload(event)
                 .setHeader(KafkaHeaders.TOPIC, topic)
                 .build();
-        template.send(message);
+        try {
+            template.send(message);
+        } catch (RuntimeException e) {
+            throw e;
+        }
     }
 }

@@ -15,12 +15,15 @@ public interface UserRelationshipRepository extends MongoRepository<UserRelation
     @Query(value = "{$and: [{'senderId': {$eq: ?0}}, {'receiverId': {$eq: ?1}}]}")
     Optional<UserRelationship> findBySenderAndReceiver(Long senderId, Long receiverId);
 
-    @Query(value = "{$and: [{'receiverId': {$eq: ?0}}, {'status': {$eq: 'PENDING'}}]}", fields = "{'id': 0, 'senderId': 1}")
-    List<Long> findWaitList(Long userId);
+    @Query(value = "{$and: [{'senderId': {$eq: ?0}}, {'receiverId': {$eq: ?1}}, {'status': {$eq: ?2}}]}")
+    Optional<UserRelationship> findBySenderAndReceiverAndStatus(Long senderId, Long receiverId, String status);
 
-    @Query(value = "{$and: [ {$or: [{'senderId': {$eq: ?0}}, {'receiverId': {$eq: ?0}}]}, {'status': 'FRIEND'}]}")
-    List<UserRelationship> findFriendList(Long userId);
+    @Query(value = "{$and: [{'receiverId': {$eq: ?0}}, {'status': {$eq: ?1}}]}")
+    List<UserRelationship> findWaitList(Long userId, String status);
 
-    @Query(value = "{$and: [{'senderId': {$eq: ?0}}, {'status': {$eq: 'PENDING'}}]}", fields = "{'id': 0, 'receiverId': 1}")
-    List<Long> findPendingRequests(Long userId);
+    @Query(value = "{$and: [ {$or: [{'senderId': {$eq: ?0}}, {'receiverId': {$eq: ?0}}]}, {'status': ?1}]}")
+    List<UserRelationship> findFriendList(Long userId, String status);
+
+    @Query(value = "{$and: [{'senderId': {$eq: ?0}}, {'status': {$eq: ?1}}]}")
+    List<UserRelationship> findPendingRequests(Long userId, String status);
 }

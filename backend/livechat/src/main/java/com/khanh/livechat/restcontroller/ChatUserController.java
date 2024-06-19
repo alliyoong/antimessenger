@@ -65,4 +65,45 @@ public class ChatUserController {
                         .build()
         );
     }
+
+    @GetMapping("/wait-list/{userId}")
+    public ResponseEntity<HttpResponse> getWaitList(@PathVariable("userId") Long userId) {
+        var data = userService.getWaitList(userId);
+        return ResponseEntity.created(null).body(
+                HttpResponse.builder()
+                        .httpStatusCode(OK.value())
+                        .httpStatus(OK)
+                        .data(Map.of("waitList", data))
+                        .message("Successfully retrieve data")
+                        .build()
+        );
+    }
+
+    @GetMapping("/pending-requests/{userId}")
+    public ResponseEntity<HttpResponse> getPendingRequests(@PathVariable("userId") Long userId) {
+        var data = userService.getPendingRequests(userId);
+        return ResponseEntity.created(null).body(
+                HttpResponse.builder()
+                        .httpStatusCode(OK.value())
+                        .httpStatus(OK)
+                        .data(Map.of("pendingRequests", data))
+                        .message("Successfully retrieve data")
+                        .build()
+        );
+    }
+
+    @GetMapping("/cancel-requests/{userId}/{friendId}")
+    public ResponseEntity<HttpResponse> cancelRequest(
+            @PathVariable("userId") Long userId,
+            @PathVariable("friendId") Long friendId
+    ) {
+        userService.removeRelation(userId, friendId);
+        return ResponseEntity.created(null).body(
+                HttpResponse.builder()
+                        .httpStatusCode(NO_CONTENT.value())
+                        .httpStatus(NO_CONTENT)
+                        .message("Successfully cancel request")
+                        .build()
+        );
+    }
 }

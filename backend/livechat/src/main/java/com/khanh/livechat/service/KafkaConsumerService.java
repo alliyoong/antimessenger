@@ -7,7 +7,6 @@ import com.khanh.livechat.model.dto.mapper.DtoMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +17,6 @@ import static com.khanh.livechat.constant.KafkaTopicName.*;
 @Slf4j
 public class KafkaConsumerService {
     private final ChatUserService chatUserService;
-
-    private final KafkaTemplate<String, String> kafkaTemplate;
 
 //    public String login(ChatUserLogin user) {
 //        log.info("sending user to topic login :: {}", user.toString());
