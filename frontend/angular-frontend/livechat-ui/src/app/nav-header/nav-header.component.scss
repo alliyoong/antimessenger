@@ -20,9 +20,17 @@
   flex: 1 1 auto
 }
 
+.mat-subheading-4 {
+  color: linear-gradient(to right, #ffff99 0%, #cc7a00 100%);
+}
+
 a {
+  padding-top: 5px;
   text-decoration: none;
-  color: blue;
+  // color: linear-gradient(to right, #ffff99 0%, #cc7a00 100%);
+  background: -webkit-radial-gradient(#ffff99 0%, #cc7a00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .search-bar-container {

@@ -21,7 +21,7 @@ public interface MessAccountService {
 
     void deleteAccount(Long id);
 
-    void resetPassword(Long id);
+    String resetPassword(Long id);
 
     MessAccount updateProfileImage(String username, MultipartFile file);
 }

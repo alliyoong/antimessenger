@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AccountDetailComponent } from '../account-detail/account-detail.component';
 import { Router } from '@angular/router';
-import { Subscription, mergeMap } from 'rxjs';
+import { Subscription, switchMap } from 'rxjs';
 import { SnackbarNotiService } from '../services/snackbar-noti.service';
 import { NotificationType } from '../constants/notification-type.enum';
 import { MatIconModule } from '@angular/material/icon';
@@ -54,7 +54,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     this.subscriptions.push(this.sharedService.searchSubject$.pipe(
-      mergeMap((state) => {
+      switchMap((state) => {
         return this.userService.searchUser(state.searchValue!)
       })
     ).subscribe({
@@ -122,7 +122,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   startChatting(user: User) {
-    this.route.navigate(['/chat'])
+    this.route.navigate(['/livechat'])
   }
 
   cancelRequest(friend: User): void {

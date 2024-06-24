@@ -111,11 +111,12 @@ public class MessAccountForAdminController extends AppExceptionHandler {
 
     @GetMapping("/reset-password/{id}")
     public ResponseEntity<HttpResponse> resetPassword(@PathVariable long id) {
-        messAccountService.resetPassword(id);
+        String newPassword = messAccountService.resetPassword(id);
         return ResponseEntity.created(null).body(
             HttpResponse.builder()
                     .httpStatusCode(OK.value())
                     .httpStatus(OK)
+                    .data(Map.of("newPassword", newPassword))
                     .message("New password has been sent to users email")
                     .build()
         );

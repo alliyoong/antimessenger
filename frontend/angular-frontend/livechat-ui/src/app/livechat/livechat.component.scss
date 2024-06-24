@@ -1,0 +1,208 @@
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+$primary-color: #11998e;
+$secondary-color: #38ef7d;
+$chat-padding-x: 20px;
+$chat-padding-y: 15px;
+$chat-popup-width: 370px;
+$chat-popup-height: 560px;
+$default-font-size: 14px;
+
+.wrapper {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(320deg, #ffb3ff, #99ddff, #ffdd99);
+  display: flex;
+  justify-content: center;
+}
+
+.main-content {
+  min-height: calc(100vh - 65px);
+  width: 60%;
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: 40% 60%;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+
+.livechat-right {
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  // box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
+  display: flex;
+  flex-direction: column;
+  // justify-content: center;
+}
+
+.friend-wrapper {
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 10px;
+  box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
+  margin-bottom: 10px;
+  // text-align: left;
+  width: 99%;
+  height: 5rem;
+  // flex-basis: 60%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  cursor: pointer;
+}
+
+.content-item {
+  width: 20%;
+  align-content: center;
+
+  >img {
+    width: 45px;
+    height: 45px;
+    margin-left: 10px;
+    border-radius: 20px;
+  }
+}
+
+.chat-wrapper {
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 10px;
+  box-shadow: 0 4px 30px rgba(35, 35, 35, 0.1);
+  margin-bottom: 10px;
+  text-align: left;
+  width: 96%;
+  height: 5rem;
+  // flex-basis: 60%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.livechat-left {
+
+  width: 100%;
+  height: calc(100vh - 75px);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  // margin-left: 3rem;
+  background-color: white;
+  overflow-y: auto;
+  transform: scale(0) rotateZ(45deg);
+  transform-origin: left bottom;
+  box-shadow: 0 10px 40px -20px black;
+  opacity: 0;
+  transition: all .2s ease-in;
+}
+
+.open {
+  transform: scale(1) rotateZ(0);
+  opacity: 1;
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $chat-padding-y $chat-padding-x;
+  background: linear-gradient(to right, darken($primary-color, 40%), darken($secondary-color, 40%));
+  color: white;
+  font-size: $default-font-size + 2;
+
+  button {
+    color: rgba($color: white, $alpha: .5);
+    background: none;
+    border: none;
+
+    &:hover {
+      color: white;
+    }
+  }
+}
+
+.chat-body {
+  padding: $chat-padding-y $chat-padding-x;
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  gap: 2rem;
+  flex: 1;
+
+  .chat-message-item {
+    border-radius: 15px 15px 15px 0;
+    padding: 10px 15px;
+    background: linear-gradient(to right, darken($primary-color, 40%), darken($secondary-color, 40%));
+    color: white;
+    align-self: flex-start;
+    position: relative;
+
+    time {
+      position: absolute;
+      opacity: .4;
+      inset: 0;
+      margin-top: -18px;
+      font-weight: bold;
+      font-size: $default-font-size - 2;
+      text-align: left;
+      padding-left: 5px;
+      color: black;
+    }
+
+    &.out {
+      background: linear-gradient(to left, darken($primary-color, 40%), darken($secondary-color, 40%));
+      align-self: flex-end;
+      border-radius: 15px 15px 0 15px;
+      max-width: 80%;
+
+      time {
+        padding-right: 5px;
+        text-align: right;
+      }
+    }
+  }
+}
+
+.chat-footer {
+  background-color: #f4f4f4;
+  border-top: 1px solid #dddddd;
+  display: flex;
+  align-items: center;
+  padding-right: $chat-padding-x;
+  padding-left: $chat-padding-x;
+
+  button {
+    display: block;
+    padding: 10px;
+    margin-right: -10px;
+    color: #555;
+    border: none;
+
+    &:hover {
+      color: black;
+    }
+  }
+
+  input {
+    flex: 1;
+    padding: $chat-padding-y 0;
+    border: none;
+    width: 100%;
+    background: none;
+    font-size: $default-font-size;
+    color: black;
+
+    &::placeholder {
+      color: #555555;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+}

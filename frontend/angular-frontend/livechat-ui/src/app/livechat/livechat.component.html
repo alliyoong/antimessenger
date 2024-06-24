@@ -1,0 +1,39 @@
+<div class="wrapper">
+  <div class="main-content">
+    <div class="livechat-right">
+      <div class="friend-wrapper" *ngFor="let friend of friendList" (click)="showChat(friend)">
+        <div class="content-item">
+          <img src={{friend.imageUrl}} alt="">
+        </div>
+        <div class="content-item" [ngStyle]="{flex: '1'}">
+          <span>{{friend.lastName}} {{friend.firstName}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="livechat-left" #chatBox>
+      <div class="chat-header">
+        <span>{{currentFriend!.lastName}} {{currentFriend!.firstName}}</span>
+        <button type="button" mat-button (click)="closeChat()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="chat-body" #chatBody>
+        <div class="chat-message-item" *ngFor="let chatItem of chatList"
+          [ngClass]="{'out': chatItem.senderId !== currentFriend.userId}">
+          <span>{{chatItem.content}}</span>
+          <time>{{chatItem.timestamp | date: 'hh:mm:ss'}}</time>
+        </div>
+
+      </div>
+
+      <div class="chat-footer">
+        <input (keyup)="handleInputKeyUp($event)" type="text" placeholder="Write a message" #chatInput>
+        <button type="button" mat-button (click)="sendMessage()">
+          <mat-icon>send</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

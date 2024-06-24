@@ -8,6 +8,8 @@ import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
 import { ConfigService } from './services/config.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { rxStompServiceFactory } from './utilities/rx-stomp-service-factory';
+import { RxStompService } from './services/rx-stomp.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,6 +20,10 @@ export const appConfig: ApplicationConfig = {
       useFactory: configFactory,
       deps: [ConfigService],
       multi: true
+    },
+    {
+      provide: RxStompService,
+      useFactory: rxStompServiceFactory
     },
     importProvidersFrom(
       JwtModule.forRoot({

@@ -15,21 +15,22 @@ export class ResetPasswordConfirmDialogComponent {
   data: Account;
   showLoading: boolean = false;
 
-  constructor(@Inject(MAT_DIALOG_DATA) data: Account, private notiService: SnackbarNotiService, private accountService: AccountByAdminService, private dialogRef: MatDialogRef<ResetPasswordConfirmDialogComponent>){
+  constructor(@Inject(MAT_DIALOG_DATA) data: Account, private notiService: SnackbarNotiService, private accountService: AccountByAdminService, private dialogRef: MatDialogRef<ResetPasswordConfirmDialogComponent>) {
     this.data = data;
   }
 
-  resetPassword(){
-    if(this.data.accountId) {
+  resetPassword() {
+    if (this.data.accountId) {
       this.showLoading = true;
       this.accountService.resetPassword(this.data.accountId).pipe(take(1)).subscribe({
         next: res => {
-          this.notiService.sendNoti(NotificationType.SUCCESS,res.message);
+          this.notiService.sendNoti(NotificationType.SUCCESS, res.message);
           this.showLoading = false;
           this.dialogRef.close();
+          console.log(res);
         },
         error: res => {
-          this.notiService.sendNoti(NotificationType.ERROR,res.message);
+          this.notiService.sendNoti(NotificationType.ERROR, res.message);
           this.showLoading = false;
         },
         complete: () => {

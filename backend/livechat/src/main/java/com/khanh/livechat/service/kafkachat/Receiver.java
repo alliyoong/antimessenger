@@ -1,7 +1,6 @@
 package com.khanh.livechat.service.kafkachat;
 
-import com.khanh.livechat.constant.KafkaTopicName;
-import com.khanh.livechat.model.ChatMessage;
+import com.khanh.livechat.model.ChatMessageBackup;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -20,7 +19,7 @@ public class Receiver {
     private final SimpUserRegistry userRegistry;
 
     @KafkaListener(topics = CHAT_TOPIC, groupId = "chat")
-    public void consume(ChatMessage chatMessage) {
+    public void consume(ChatMessageBackup chatMessage) {
         log.info("Received message from Kafka: {}", chatMessage.toString());
         for (SimpUser user : userRegistry.getUsers()) {
             for (SimpSession session : user.getSessions()) {

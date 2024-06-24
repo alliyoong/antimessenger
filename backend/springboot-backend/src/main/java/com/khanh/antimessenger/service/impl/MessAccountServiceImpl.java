@@ -169,17 +169,20 @@ public class MessAccountServiceImpl implements MessAccountService {
     }
 
     @Override
-    public void resetPassword(Long id) {
+    public String resetPassword(Long id) {
         MessAccount toReset = getAccountByAccountId(id);
         String generatedPassword = PasswordService.generate();
+        String toReturn = "";
         log.info(String.format("Password generated is: %s",generatedPassword));
         if (isPasswordValid(generatedPassword)) {
+            toReturn = generatedPassword;
             toReset.setPassword(encoder.encode(generatedPassword));
             messAccountRepository.save(toReset);
             emailService.sendEmail(toReset.getEmail(), toReset.getFirstName(), generatedPassword, RESET_PASSWORD_BY_ADMIN);
         } else {
             throw new InvalidPasswordException();
         }
+        return toReturn;
     }
 
     @Override

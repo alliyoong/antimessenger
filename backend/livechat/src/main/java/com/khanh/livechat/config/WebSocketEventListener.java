@@ -2,7 +2,7 @@ package com.khanh.livechat.config;
 
 
 import com.khanh.livechat.constant.MessageType;
-import com.khanh.livechat.model.ChatMessage;
+import com.khanh.livechat.model.ChatMessageBackup;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -25,7 +25,7 @@ public class WebSocketEventListener {
         String username = (String) headerAccessor.getSessionAttributes().get("username");
         if (username != null) {
             log.info("user disconnected: {}", username);
-            var chatMessage = ChatMessage.builder()
+            var chatMessage = ChatMessageBackup.builder()
                     .type(MessageType.LEAVE)
                     .sender(username)
                     .build();
