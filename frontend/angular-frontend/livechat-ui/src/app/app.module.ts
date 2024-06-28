@@ -74,10 +74,6 @@ export function tokenGetter() {
       deps: [ConfigService],
       multi: true
     },
-    {
-      provide: ErrorStateMatcher,
-      useClass: CustomErrorMatcher
-    },
   ],
   // bootstrap: [AppComponent]
 })

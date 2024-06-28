@@ -1,0 +1,102 @@
+<div class="container">
+  <h2>Change your information</h2>
+  <form class="edit-user-form" [formGroup]="editUserForm">
+    <div class="edit-user-form-content">
+      <mat-form-field class="example-full-width form-item">
+        <mat-label>User ID</mat-label>
+        <input type="text" matInput formControlName="userId" placeholder="User ID">
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width form-item">
+        <mat-label>Enter first name</mat-label>
+        <input type="text" matInput formControlName="firstName" placeholder="firstName">
+        <mat-error *ngIf="editUserForm.get('firstName')?.hasError('required')">
+          First name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width form-item">
+        <mat-label>Enter last name</mat-label>
+        <input type="text" matInput formControlName="lastName" placeholder="lastName">
+        <mat-error *ngIf="editUserForm.get('lastName')?.hasError('required')">
+          Last name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width form-item">
+        <mat-label>Enter username</mat-label>
+        <input type="text" matInput formControlName="username" placeholder="username">
+        <mat-error *ngIf="editUserForm.get('username')?.hasError('required')">
+          Username is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width form-item">
+        <mat-label>Enter phone</mat-label>
+        <input type="text" matInput formControlName="phone" placeholder="phone number">
+        <mat-error *ngIf="editUserForm.get('phone')?.hasError('invalidPhoneNumber')">
+          Phone number should contain only 8-11 digits
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width form-item">
+        <mat-label>Enter bio</mat-label>
+        <input type="text" matInput formControlName="bio" placeholder="bio information">
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width form-item">
+        <mat-label>Enter address</mat-label>
+        <input type="text" matInput formControlName="address" placeholder="address information">
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width form-item">
+        <mat-label>Enter email</mat-label>
+        <input type="text" matInput formControlName="email" placeholder="email">
+        <mat-error *ngIf="editUserForm.get('email')?.hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="editUserForm.get('email')?.hasError('email')">
+          Email is invalid
+        </mat-error>
+      </mat-form-field>
+
+      <div class="drop-zone" appDragndrop (fileDropped)="onFileDropped($event)">
+        <input accept="image/*" type="file" #fileDropRef id="fileDropRef" multiple="false"
+          (change)="fileBrowseHandler($event)">
+        <img src="assets/img/upload-file-svgrepo-com.svg" height="40px" alt="">
+        <h3>Drag and drop 1 image not larger than 2MB here</h3>
+        <h3>or</h3>
+        <label for="fileDropRef">Browse for file</label>
+      </div>
+      <mat-error *ngIf="fileOverSizeError">
+        File extends max size
+      </mat-error>
+      <mat-error *ngIf="fileExtensionError">
+        Only jpg or png file accepted
+      </mat-error>
+      <div class="files-list" *ngIf="!!imageFiles.length">
+        <div class="single-file" *ngFor="let file of imageFiles; let i = index">
+          <div class="file-icon" style="width: 50px">
+            <mat-icon>insert_drive_file</mat-icon>
+          </div>
+          <div class="info">
+            <h4 class="name">
+              {{ file?.name }}
+            </h4>
+            <p class="size">
+              {{ formatBytes(file?.size) }}
+            </p>
+            <!-- <app-progress-bar [progress]="file?.progress"></app-progress-bar> -->
+          </div>
+
+          <div class="delete" (click)="deleteFile()">
+            <mat-icon>delete</mat-icon>
+          </div>
+        </div>
+      </div>
+
+      <span style="align-self: center;"><mat-spinner [diameter]="45" *ngIf="showLoading"></mat-spinner></span>
+      <button mat-button [disabled]="editUserForm.invalid || editUserForm.pristine" (click)="editUser()">OK</button>
+    </div>
+  </form>
+</div>

@@ -65,8 +65,8 @@ export class LivechatComponent implements OnInit, OnDestroy, AfterViewChecked {
     const userId = this.currentUser!.userId;
 
     if (userId) {
-      this.subscriptions.push(this.privateQueue(userId!));
-      this.subscriptions.push(this.publicQueue());
+      this.privateQueue(userId!);
+      this.publicQueue();
       this.subscriptions.push(this.getFriendList(userId!));
     }
   }
@@ -74,12 +74,10 @@ export class LivechatComponent implements OnInit, OnDestroy, AfterViewChecked {
   getFriendList(userId: number): Subscription {
     return this.userService.getFriendList(userId).subscribe({
       next: res => {
-        console.log(res);
         this.friendList = res.data.friendList;
-        this.notiService.sendNoti(NotificationType.SUCCESS, res.message);
+        // this.notiService.sendNoti(NotificationType.SUCCESS, res.message);
       },
       error: res => {
-        console.log(res);
         this.notiService.sendNoti(NotificationType.ERROR, res.message);
       }
     });
@@ -96,7 +94,7 @@ export class LivechatComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.subscriptions.push(this.chatMessageService.getChatHistory(this.currentUser.userId, this.currentFriend.userId).subscribe({
         next: res => {
           this.chatList = res.data.chatHistory;
-          this.notiService.sendNoti(NotificationType.SUCCESS, res.message);
+          // this.notiService.sendNoti(NotificationType.SUCCESS, res.message);
         },
         error: res => {
           this.notiService.sendNoti(NotificationType.ERROR, res.message);
@@ -115,7 +113,6 @@ export class LivechatComponent implements OnInit, OnDestroy, AfterViewChecked {
     return this.rxStompService.watch(`/user/${userId}/queue/messages`).subscribe((message: Message) => {
       const data = this.convertToChatMessage(message);
       this.chatList.push(data);
-      console.log(message);
     });
   }
 
@@ -123,7 +120,6 @@ export class LivechatComponent implements OnInit, OnDestroy, AfterViewChecked {
     return this.rxStompService.watch(`/user/public`).subscribe((message: Message) => {
       const data = this.convertToChatMessage(message);
       this.chatList.push(data);
-      console.log(message);
     })
   }
 

@@ -55,6 +55,14 @@ $default-font-size: 14px;
   flex-direction: row;
   justify-content: space-around;
   cursor: pointer;
+
+  &:hover {
+    background: #ffdd99;
+  }
+
+  &.active {
+    background: #ffdd99;
+  }
 }
 
 .content-item {

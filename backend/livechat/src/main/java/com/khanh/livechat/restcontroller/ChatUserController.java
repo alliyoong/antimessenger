@@ -21,7 +21,8 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5000")
+//@CrossOrigin(origins = "http://localhost:5000")
+@CrossOrigin(origins = "*")
 @RequestMapping("/user")
 public class ChatUserController {
     private final ChatUserService userService;

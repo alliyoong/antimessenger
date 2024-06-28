@@ -10,8 +10,6 @@ import com.khanh.antimessenger.model.HttpResponse;
 import com.khanh.antimessenger.model.MessAccount;
 import com.khanh.antimessenger.service.MessAccountService;
 import com.khanh.antimessenger.utilities.ValidUploadFile;
-import jakarta.mail.Multipart;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;

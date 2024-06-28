@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AccountDetailComponent } from '../account-detail/account-detail.component';
 import { Router } from '@angular/router';
-import { Subscription, switchMap } from 'rxjs';
+import { Subscription, first, iif, of, shareReplay, switchMap, take } from 'rxjs';
 import { SnackbarNotiService } from '../services/snackbar-noti.service';
 import { NotificationType } from '../constants/notification-type.enum';
 import { MatIconModule } from '@angular/material/icon';
@@ -53,30 +53,60 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.getPendingRequests(currentUserId);
     }
 
-    this.subscriptions.push(this.sharedService.searchSubject$.pipe(
-      switchMap((state) => {
-        return this.userService.searchUser(state.searchValue!)
-      })
+    this.subscriptions.push(this.fetchSearchResult());
+  }
+
+  // fetchSearchResult(): Subscription {
+  //   return this.sharedService.searchSubject$.pipe(
+  //     switchMap((state) => {
+  //       console.log(state.isFirstSearch);
+  //       return this.userService.searchUser(state.searchValue!);
+  //     }
+  //     ),
+  //   ).subscribe({
+  //     next: res => {
+  //       if (res) {
+  //         console.log("number");
+  //         this.activeTab = 0;
+  //         this.discoverList = res.data.users;
+  //         if (this.discoverList.length === 0) {
+  //           this.notiService.sendNoti(NotificationType.WARN, "No found result");
+  //         }
+  //       }
+  //     },
+  //     error: res => {
+  //       this.notiService.sendNoti(NotificationType.ERROR, res.message);
+  //     }
+  //   });
+  // }
+
+  fetchSearchResult(): Subscription {
+    return this.sharedService.searchSubject$.pipe(
+      switchMap((state) =>
+        iif(() => !(state.isFirstSearch), this.userService.searchUser(state.searchValue!), of(null))
+      ),
     ).subscribe({
       next: res => {
-        this.activeTab = 0;
-        this.discoverList = res.data.users;
-        console.log(res.data.users);
+        if (res) {
+          this.activeTab = 0;
+          this.discoverList = res.data.users;
+          if (this.discoverList.length === 0) {
+            this.notiService.sendNoti(NotificationType.WARN, "No found result");
+          }
+        }
       },
       error: res => {
         this.notiService.sendNoti(NotificationType.ERROR, res.message);
       }
-    }));
+    });
   }
 
   getFriendList(userId: number): void {
     this.subscriptions.push(this.userService.getFriendList(userId).subscribe({
       next: res => {
-        console.log(res);
         this.friendList = res.data.friendList;
       },
       error: res => {
-        console.log(res);
         this.notiService.sendNoti(NotificationType.ERROR, res.message);
       }
     }));
@@ -85,11 +115,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   getWaitList(userId: number): void {
     this.subscriptions.push(this.userService.getWaitList(userId).subscribe({
       next: res => {
-        console.log(res);
         this.waitList = res.data.waitList;
       },
       error: res => {
-        console.log(res);
         this.notiService.sendNoti(NotificationType.ERROR, res.message);
       }
     }));
@@ -98,11 +126,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   getPendingRequests(userId: number): void {
     this.subscriptions.push(this.userService.getPendingRequests(userId).subscribe({
       next: res => {
-        console.log(res);
         this.pendingRequests = res.data.pendingRequests;
       },
       error: res => {
-        console.log(res);
         this.notiService.sendNoti(NotificationType.ERROR, res.message);
       }
     }));

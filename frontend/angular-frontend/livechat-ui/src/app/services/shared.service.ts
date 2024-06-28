@@ -8,7 +8,8 @@ import { SharedState } from '../domain/shared-state';
 export class SharedService {
   searchSubject = new BehaviorSubject<SharedState>({
     searchValue: '',
-    activeTab: 0
+    activeTab: 0,
+    isFirstSearch: true
   });
   searchSubject$ = this.searchSubject.asObservable();
 

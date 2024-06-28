@@ -9,11 +9,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCommonModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { RouterModule } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-nav-header',
@@ -30,7 +31,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatMenuModule,
     MatDividerModule,
     RouterModule,
-    MatTooltipModule
+    MatTooltipModule,
   ]
 })
 export class NavHeaderComponent {
@@ -44,7 +45,11 @@ export class NavHeaderComponent {
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver, private sharedService: SharedService) { }
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private sharedService: SharedService,
+    private userService: UserService
+  ) { }
 
   openSearch(): void {
     this.toggleSearch = true;
@@ -58,10 +63,20 @@ export class NavHeaderComponent {
     this.toggleSearch = false;
   }
 
-  searchUser(): void {
+  searchUser(f: NgForm): void {
     const sharedState: SharedState = {};
-    sharedState.searchValue = this.searchText;
-    this.sharedService.searchSubject.next(sharedState);
+    if (f.pristine) {
+      sharedState.isFirstSearch = true;
+      this.sharedService.searchSubject.next(sharedState);
+    } else {
+      sharedState.isFirstSearch = false;
+      sharedState.searchValue = this.searchText;
+      this.sharedService.searchSubject.next(sharedState);
+    }
+  }
+
+  logOut(): void {
+    this.userService.logOut();
   }
 
 }

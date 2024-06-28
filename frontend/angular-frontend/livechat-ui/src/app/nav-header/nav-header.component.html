@@ -15,7 +15,7 @@
       <!-- <mat-icon aria-label="Side nav toggle icon">menu</mat-icon> -->
       <div style="padding:0px 0px 10px 0px; width: 20%;">
         <div class="mat-title" style="margin-bottom:2px;"><a routerLink="home">Antimess</a></div>
-        <div class="mat-subheading-4">Connect with your friends</div>
+        <!-- <div class="mat-subheading-4">Connect with your friends</div> -->
       </div> <!-- </button> -->
       <!-- <span> -->
       <!-- <a routerLink="friendlist">antimess</a> -->
@@ -24,16 +24,16 @@
       <button mat-icon-button (click)="openSearch()" [style.display]="toggleSearch?'none':'inherit'">
         <mat-icon>search</mat-icon>
       </button>
-      <div class="search-bar-container" [style.display]="toggleSearch?'inherit':'none'">
-        <button mat-icon-button (click)="searchUser()">
+      <form class="search-bar-container" [style.display]="toggleSearch?'inherit':'none'" #f="ngForm">
+        <button mat-icon-button (click)="searchUser(f)" #searchButton>
           <mat-icon>search</mat-icon>
         </button>
-        <input (keyup.enter)="searchUser()" class="search-input" type="text" placeholder="Search"
-          [(ngModel)]="searchText" #searchBar>
+        <input class="search-input" type="text" placeholder="Search" [(ngModel)]="searchText" #searchBar
+          name="searchInput">
         <button mat-icon-button (click)="closeSearch()">
           <mat-icon>close</mat-icon>
         </button>
-      </div>
+      </form>
       <span class="item-spacer"></span>
       <div style="width: 20%; display: flex; flex-direction: row-reverse;">
         <button mat-icon-button matTooltip="My Account" [matMenuTriggerFor]="userAccountMenu">
@@ -41,9 +41,9 @@
         </button>
         <mat-menu #userAccountMenu [overlapTrigger]="false" yPosition="below">
           <button mat-menu-item routerLink="login">
-            <mat-icon>input</mat-icon><span>Login another account</span>
+            <mat-icon>login</mat-icon><span>Login</span>
           </button>
-          <button mat-menu-item routerLink="#">
+          <button mat-menu-item routerLink="my-account">
             <mat-icon>person</mat-icon><span>My Account</span>
           </button>
           <button mat-menu-item routerLink="#">
@@ -53,7 +53,7 @@
             <mat-icon>help</mat-icon><span>Help</span>
           </button>
           <mat-divider></mat-divider>
-          <button mat-menu-item routerLink="#">
+          <button mat-menu-item routerLink="login" (click)="logOut()">
             <mat-icon>exit_to_app</mat-icon>Logout
           </button>
         </mat-menu>

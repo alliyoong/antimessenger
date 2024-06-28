@@ -1,4 +1,4 @@
 {
-  "antimessUrl": "http://localhost:8088",
-  "livechatUrl": "http://localhost:8089"
+  "antimessUrl": "http://192.168.100.10:8088",
+  "livechatUrl": "http://192.168.100.10:8089"
 }

@@ -27,7 +27,8 @@ import static org.springframework.http.HttpStatus.OK;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-@CrossOrigin(origins = "http://localhost:5000")
+@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "http://localhost:5000")
 public class ChatController {
     private final Sender sender;
     private final SimpMessageSendingOperations messageTemplate;

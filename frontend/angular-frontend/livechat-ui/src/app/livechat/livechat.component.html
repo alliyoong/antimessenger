@@ -1,7 +1,8 @@
 <div class="wrapper">
   <div class="main-content">
     <div class="livechat-right">
-      <div class="friend-wrapper" *ngFor="let friend of friendList" (click)="showChat(friend)">
+      <div class="friend-wrapper" *ngFor="let friend of friendList" (click)="showChat(friend)"
+        [ngClass]="{'active': friend.userId === currentFriend.userId}">
         <div class="content-item">
           <img src={{friend.imageUrl}} alt="">
         </div>

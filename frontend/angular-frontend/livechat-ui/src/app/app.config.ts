@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, ErrorHandler, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -10,6 +10,8 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { rxStompServiceFactory } from './utilities/rx-stomp-service-factory';
 import { RxStompService } from './services/rx-stomp.service';
+import { ErrorStateMatcher } from '@angular/material/core';
+import { CustomErrorMatcher } from './utilities/custom-error-matcher';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,6 +26,10 @@ export const appConfig: ApplicationConfig = {
     {
       provide: RxStompService,
       useFactory: rxStompServiceFactory
+    },
+    {
+      provide: ErrorStateMatcher,
+      useClass: CustomErrorMatcher
     },
     importProvidersFrom(
       JwtModule.forRoot({

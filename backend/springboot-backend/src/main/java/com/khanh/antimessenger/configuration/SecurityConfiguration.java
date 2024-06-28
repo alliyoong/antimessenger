@@ -46,7 +46,7 @@ public class SecurityConfiguration {
                             var cors = new CorsConfiguration();
                             cors.setAllowedHeaders(List.of("*"));
                             cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                            cors.setAllowedOrigins(List.of(frontEndUrlAdmin, frontEndUrlLiveChat));
+                            cors.setAllowedOrigins(List.of(frontEndUrlAdmin, frontEndUrlLiveChat, "*"));
                             return cors;
                         }
                 ))
