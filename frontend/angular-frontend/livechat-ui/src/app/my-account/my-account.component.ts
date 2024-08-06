@@ -67,17 +67,18 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     const data = this.editUserForm.getRawValue();
     const fd = new FormData();
     fd.append('account', this.createUserBlob());
-    // if(this.toAddFile) {
-    // fd.append('profileImage', this.toAddFile);
-    // }
     if (this.imageFiles[0]) {
       fd.append('profileImage', this.imageFiles[0])
     }
 
-    this.subscriptions.push(this.userService.update(fd, data.accountId).subscribe({
+    this.subscriptions.push(this.userService.update(fd, data.userId).subscribe({
       next: response => {
         this.showLoading = false;
         this.notiService.sendNoti(NotificationType.SUCCESS, response.message);
+      },
+      error: response => {
+        this.notiService.sendNoti(NotificationType.ERROR, response.error.message);
+        this.showLoading = false;
       }
     }));
   }

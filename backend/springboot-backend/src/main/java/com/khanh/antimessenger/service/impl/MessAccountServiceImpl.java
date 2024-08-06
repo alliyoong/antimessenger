@@ -24,6 +24,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -108,7 +111,7 @@ public class MessAccountServiceImpl implements MessAccountService {
     public MessAccount updateAccount(Long accountId, CreateAccountRequestDto updateData, MultipartFile profileImage) {
         String toCheckUserName = updateData.getUsername();
         String toCheckEmail = updateData.getEmail();
-        Role toCheckRole = isRoleExisted(updateData.getRole());
+        Role toCheckRole;
 
         MessAccount toUpdate = getAccountByAccountId(accountId);
         if (!toCheckUserName.equals(toUpdate.getUsername()) && messAccountRepository.findMessAccountByUsername(toCheckUserName).isPresent()) {
@@ -121,12 +124,15 @@ public class MessAccountServiceImpl implements MessAccountService {
 
         DtoMapper<CreateAccountRequestDto, MessAccount> mapper = new DtoMapper<>(CreateAccountRequestDto::new, MessAccount::new);
         toUpdate = mapper.toEntity(updateData, toUpdate);
-        toUpdate.setRole(toCheckRole);
+        if (!Objects.isNull(updateData.getRole()) && !updateData.getRole().isEmpty()) {
+            toCheckRole = isRoleExisted(updateData.getRole());
+            toUpdate.setRole(toCheckRole);
+        }
 //        log.info(String.format("account dc update la: %s", toUpdate.toString()));
         messAccountRepository.save(toUpdate);
         updateProfileImage(toUpdate.getUsername(), profileImage);
 
-        // send to kafka consumer
+        // send to kafka broker
         var username = toUpdate.getUsername();
         sendKafkaMessage(username, USER_UPDATE_EVENT, UPDATE_USER_TOPIC);
 

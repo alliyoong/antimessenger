@@ -26,9 +26,14 @@ logging:
     sql: debug
     org.hibernate.orm.jdbc.bind: trace
     org:
+      hibernate:
+        stat: DEBUG
+        sql: DEBUG
       apache:
         commons:
           beanutils: DEBUG
+      springframework:
+        security: DEBUG
 
 spring:
   jpa:
@@ -42,6 +47,7 @@ spring:
         globally_quoted_indentifiers: true
         dialect: org.hibernate.dialect.OracleDialect
         format_sql: true
+        generate_statistics: true
   sql:
     init:
       mode: never

@@ -33,7 +33,7 @@ public class LivechatApplication {
 		SpringApplication.run(LivechatApplication.class, args);
 	}
 
-//	@Bean
+	@Bean
 	CommandLineRunner runner(ChatUserService service, UserRelationshipRepository relateRepo) {
 		return  args -> {
 //			var objectMapper = new ObjectMapper();
@@ -44,21 +44,21 @@ public class LivechatApplication {
 //			users.stream().forEach(System.out::println);
 //			users.stream().forEach(user -> service.saveUser(user));
 
-			var relate_one = UserRelationship.builder()
-					.senderId(1L)
-					.receiverId(2L)
-					.requestTimestamp(LocalDateTime.now())
-					.status(RelationshipStatus.PENDING)
-					.build();
-
-			var relate_two = UserRelationship.builder()
-					.senderId(2L)
-					.receiverId(3L)
-					.requestTimestamp(LocalDateTime.now())
-					.status(RelationshipStatus.FRIEND)
-					.build();
-			relateRepo.save(relate_one);
-			relateRepo.save(relate_two);
+//			var relate_one = UserRelationship.builder()
+//					.senderId(1L)
+//					.receiverId(2L)
+//					.requestTimestamp(LocalDateTime.now())
+//					.status(RelationshipStatus.PENDING)
+//					.build();
+//
+//			var relate_two = UserRelationship.builder()
+//					.senderId(2L)
+//					.receiverId(3L)
+//					.requestTimestamp(LocalDateTime.now())
+//					.status(RelationshipStatus.FRIEND)
+//					.build();
+//			relateRepo.save(relate_one);
+//			relateRepo.save(relate_two);
 		};
 	}
 }

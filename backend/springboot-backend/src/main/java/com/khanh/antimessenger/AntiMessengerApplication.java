@@ -1,6 +1,8 @@
 package com.khanh.antimessenger;
 
 import com.khanh.antimessenger.constant.SecurityConstant;
+import com.khanh.antimessenger.dto.CreateAccountRequestDto;
+import com.khanh.antimessenger.service.MessAccountService;
 import com.khanh.antimessenger.service.impl.MessAccountServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -31,11 +33,26 @@ public class AntiMessengerApplication {
 		}
 	}
 
-	@Bean
-	CommandLineRunner commandLineRunner() {
+//	@Bean
+	CommandLineRunner commandLineRunner(MessAccountService accountService) {
 		return args -> {
-			log.info(String.format("user home la gi: %s", System.getProperty("user.home").toString()));
-			log.info(String.format("user dir la gi: %s", System.getProperty("user.dir").toString()));
+			var dto = CreateAccountRequestDto.builder()
+					.address("HANOI")
+					.bio("tester")
+					.firstName("Huong")
+					.lastName("Lan")
+					.username("kafkaexception")
+					.email("test@emial")
+					.isEnabled(1)
+					.isNonLocked(1)
+					.isUsingMfa(0)
+					.password("Plaintext@123")
+					.role("ROLE_USER")
+					.phone("568203945")
+					.build();
+			accountService.createAccount(dto, null);
+//			log.info(String.format("user home la gi: %s", System.getProperty("user.home").toString()));
+//			log.info(String.format("user dir la gi: %s", System.getProperty("user.dir").toString()));
 		};
 	}
 

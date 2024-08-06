@@ -94,7 +94,7 @@ export class UserService {
   }
 
   update(fd: FormData, id: string): Observable<CustomHttpResponse> {
-    return this.http.post<CustomHttpResponse>(`${this.antimessUrl}/${id}`, fd);
+    return this.http.post<CustomHttpResponse>(`${this.antimessUrl}/admin/account/${id}`, fd);
   }
 
   login(fd: FormData): Observable<HttpResponse<CustomHttpResponse>> {

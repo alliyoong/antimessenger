@@ -20,6 +20,10 @@ public class UserPrincipal implements UserDetails {
         return List.of(new SimpleGrantedAuthority(this.messAccount.getRole().getRoleName()));
     }
 
+    public Long getUserId() {
+        return this.messAccount.getAccountId();
+    }
+
     @Override
     public String getPassword() {
         return this.messAccount.getPassword();

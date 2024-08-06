@@ -8,6 +8,7 @@ import com.khanh.antimessenger.dto.dtomapper.DtoMapper;
 import com.khanh.antimessenger.exception.AppExceptionHandler;
 import com.khanh.antimessenger.model.HttpResponse;
 import com.khanh.antimessenger.model.MessAccount;
+import com.khanh.antimessenger.model.UserPrincipal;
 import com.khanh.antimessenger.service.MessAccountService;
 import com.khanh.antimessenger.utilities.ValidUploadFile;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -77,11 +80,13 @@ public class MessAccountForAdminController extends AppExceptionHandler {
         );
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPERADMIN') || #id == principal.getUserId()")
     @PostMapping(path = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<HttpResponse> updateAccount(@PathVariable Long id,
+    public ResponseEntity<HttpResponse> updateAccount(@PathVariable("id") Long id,
                                                       @Validated(OnUpdate.class) @RequestPart(name = "account") CreateAccountRequestDto data,
                                                       @ValidUploadFile @RequestPart(name = "profileImage", required = false) MultipartFile file) {
+//        var principal = (UserPrincipal) authentication.getPrincipal();
+//        log.info("Authen nhan duoc la: {}", principal.getUserId());
         MessAccount updated = messAccountService.updateAccount(id, data, file);
         return ResponseEntity.created(null).body(
                 HttpResponse.builder()

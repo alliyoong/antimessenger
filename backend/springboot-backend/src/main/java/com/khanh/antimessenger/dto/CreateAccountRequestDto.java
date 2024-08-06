@@ -47,7 +47,7 @@ public class CreateAccountRequestDto {
     private String address;
 
     @JsonProperty("role")
-    @NotEmpty(message = EMPTY_ROLE_ERROR_MSG, groups = OnUpdate.class)
+//    @NotEmpty(message = EMPTY_ROLE_ERROR_MSG, groups = OnUpdate.class)
     private String role;
 
     @JsonProperty("isEnabled")

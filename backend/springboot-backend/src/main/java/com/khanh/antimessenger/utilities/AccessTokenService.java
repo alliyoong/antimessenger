@@ -6,8 +6,11 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.khanh.antimessenger.constant.TokenType;
+import com.khanh.antimessenger.model.MessAccount;
 import com.khanh.antimessenger.model.UserPrincipal;
+import com.khanh.antimessenger.repository.MessAccountRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 
@@ -40,7 +44,9 @@ import static com.khanh.antimessenger.constant.SecurityConstant.*;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class AccessTokenService {
+    private final MessAccountRepository accountRepository;
 //    @Value("${jwt.parent-dir}")
 //    private String parentDirName;
     @Value("${jwt.public-key}")
@@ -85,8 +91,10 @@ public class AccessTokenService {
     }
 
     public Authentication getAuthentication(String username, List<GrantedAuthority> authorities, HttpServletRequest request) {
+        MessAccount messAccount = accountRepository.findMessAccountByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User cannot be found"));
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(username, null, authorities);
+                new UsernamePasswordAuthenticationToken(new UserPrincipal(messAccount), null, authorities);
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         return authenticationToken;
     }

@@ -11,7 +11,7 @@ public class SecurityConstant {
     public static final String AUTHORITIES = "Authorities";
     public static final String FORBIDDEN_MESSAGE = "You need to login to access this page";
     public static final String ACCESS_DENIED_MESSAGE = "You do not have permission to access this page";
-    public static final String[] PUBLIC_URLS = {"/login", "/register", "/verify/**", "/account/reset-password/**", "/account/image/**", "/error"};
+    public static final String[] PUBLIC_URLS = {"/login", "/register", "/verify/**", "/account/reset-password/**", "/account/image/**", "/error", "/actuator/**"};
 //    public static final String[] PUBLIC_URLS = {"/**"};
     public static final long ACCESS_TOKEN_EXPIRATION_TIME = 1_800_000; //30 minutes in milisec
     public static final long REFRESH_TOKEN_EXPIRATION_TIME = 7_889_400_000L; //3 months in milisec

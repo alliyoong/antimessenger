@@ -96,7 +96,8 @@
       </div>
 
       <span style="align-self: center;"><mat-spinner [diameter]="45" *ngIf="showLoading"></mat-spinner></span>
-      <button mat-button [disabled]="editUserForm.invalid || editUserForm.pristine" (click)="editUser()">OK</button>
+      <button mat-button *ngIf="!showLoading" [disabled]="editUserForm.invalid || editUserForm.pristine"
+        (click)="editUser()">OK</button>
     </div>
   </form>
 </div>

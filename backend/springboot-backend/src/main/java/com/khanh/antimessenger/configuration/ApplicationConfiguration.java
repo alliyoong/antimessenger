@@ -56,7 +56,7 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public AuthenticationProvider customAuthenticationProvider() {
+    public AuthenticationProvider customProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
